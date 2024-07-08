@@ -1,7 +1,7 @@
 # Algorithm-Visualiser
 Visualise Sort &amp; Search Algorithms. [Python]
 
-# Features
+# 🧾 Features
 - Select an algorithm
 - Play/Stop an algorithm
 - Step through an algorithm
@@ -9,9 +9,9 @@ Visualise Sort &amp; Search Algorithms. [Python]
 - Show the cursor (pointer) position
 
 
-# idk How to Use?
+# 🧑‍🏫 idk How to Use?
 
-# Algorithms Included
+# 👨‍💻 Algorithms Included
 - Linear Search
 - Binary Search
 - Jump Search
