@@ -1,6 +1,7 @@
 #Imports 
 import time
 import pygame
+from Algorithms import bubbleSort
 import Algorithms
 import random
 
@@ -48,6 +49,8 @@ def dimensionConstantSet(arr, x,y):
     # BEWARE IF VARIABLE, CONSTANTS MAY NOT PRODUCE INTEGERS, POTENTIALLY BREAKING SYSTEM
     
 def updateVisual(arr):
+    screen.fill("Black")    # Resets screen
+
     '''Updates the visual based of an array at a given point.'''
     for index, item in enumerate(arr):
         # Calculatre variable dimensions
@@ -58,19 +61,20 @@ def updateVisual(arr):
         # Cretae rect & draw to screen
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, "White", dimensions)
+    
+    clock.tick(5)
 
 a = createArray(arraySize)
 a = shuffleArray(a)
 dimensionConstantSet(a, screenX, screenY)
 
 """GAME LOOP"""
+bubbleSort(a)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill("black")
-    updateVisual(a)
 
     pygame.display.flip()
 
