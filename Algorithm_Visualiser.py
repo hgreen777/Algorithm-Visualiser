@@ -14,6 +14,7 @@ import math
 """Constants initialisations"""
 framerate = 1000000000000
 array_size = 1000
+current_algorithm = bubbleSort
 
 screenX,useableX = 2000, 2000
 screenY = 600
@@ -53,14 +54,7 @@ def shuffleArray(arr):
     return arr
 
 """UPDATING VISUALS"""
-# STATIC VISUALS
-def staticVisuals():
-    # Play Button
-    global play_btn
-    play_btn = pygame.draw.circle(screen, "Green",play_btn_center, play_btn_radius)
-
-
-# DYNAMIC VISUALS
+# DYNAMIC Values
 def dimensionConstantSet(arr, x,y):
     '''Updates the constant dimensions used to draw the square arrays.
        Used when the array size changes.                                '''
@@ -70,10 +64,12 @@ def dimensionConstantSet(arr, x,y):
     width = x / len(arr)
 
     # BEWARE IF VARIABLE, CONSTANTS MAY NOT PRODUCE INTEGERS, POTENTIALLY BREAKING SYSTEM
-    
+
+# DYNAMIC visuals
 def updateVisual(arr, selected, comparisons):
+    global play_btn
     screen.fill("Black")    # Resets screen
-    staticVisuals()
+    play_btn = pygame.draw.circle(screen, "Green",play_btn_center, play_btn_radius) # Draw the start/stop button
 
     # Comparisons
     txt = "#" + str(comparisons) + " Comparisons"
@@ -102,15 +98,15 @@ def updateVisual(arr, selected, comparisons):
 """Setting up for Game Loop"""
 # Creating & Shuffling array to be used by sorting algorithm.
 a = createArray(array_size)
-#a = shuffleArray(a)
+a = shuffleArray(a)        # Comment out if array is wanted to be sorted at first.
 dimensionConstantSet(a, useableX, useableY)
+updateVisual(a,0,0) # Initial view of array (sorted or not depending on if shuffled in previous line.)
+
+sorting = False
+isPlayBTNclicked = False
 
 
 """GAME LOOP"""
-sorting = False
-updateVisual(a,0,0)
-isPlayBTNclicked = False
-
 def playBtnClick():
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -139,10 +135,12 @@ while running:
         print("Starting Algoirthm")
         sorting = True
         a = shuffleArray(a)
-        bubbleSort(a, updateVisual, playBtnClick) 
+        current_algorithm(a, updateVisual, playBtnClick)
     elif isPlayBTNclicked and sorting:
+        # If the button is clicked and sorting is occuring, stop it. 
         sorting = False
     
+    # Ensure that the button is "reset"
     isPlayBTNclicked = False
 
     pygame.display.flip()   
