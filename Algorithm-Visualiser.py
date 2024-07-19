@@ -14,22 +14,25 @@ running = True
 
 testArr = [1,2,3,4,5,6,7,8,9,10]
 
-class recobj:
-    colour = "White"
+def dimensionConstantSet(arr, x,y):
+    global height_interval, width
+    # Semi Constants For Box Dimenstions
+    height_interval = y / len(arr)
+    width = x / len(arr)
 
-    x = 0
-    y = 0
-    top = 0
-    left = 0
+dimensionConstantSet(testArr, screenX, screenY)
+    
+def updateVisual(arr):
+    for index, item in enumerate(arr):
+        # Calculatre variable dimensions
+        height = item * height_interval
+        left = index * width
+        top = screenY - height
 
-    def __init__(self, wholeArr, dataObj, left):
-        x = screenX / len(wholeArr) 
-        y = dataObj * (screenY / len(wholeArr)) 
-        top = y
-    
-    obj = pygame.Rect(left,top,x,y)
-    
-        
+        # Cretae rect & draw to screen
+        dimensions = pygame.Rect(left, top, width, height)
+        pygame.draw.rect(screen, "White", dimensions)
+
     
 
 while running:
@@ -38,22 +41,11 @@ while running:
             running = False
 
     screen.fill("black")
-
-    for index, num in enumerate(testArr):
-        left = index * (screenX / len(testArr))
-        rec = recobj(testArr, num, left)
-
-        pygame.draw.rect(screen, "White", rec.obj)
-
-    x = screenX / 11
-    y = 1 * (screenY / 11)
-    top = y
-    rec1 = pygame.Rect(5 * (screenX / 10),top,x,y)
-    pygame.draw.rect(screen, "White", rec1)
-
+    print(pygame.mouse.get_pos())
+    updateVisual(testArr)
 
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(5)    
 
 pygame.quit()
