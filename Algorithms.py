@@ -6,6 +6,7 @@ def bubbleSort(arr, update_visual_callback, quit_call):
         swapped = False
         for j in range (0, n-i-1):
             if quit_call():
+                print("Stopping Algorithm")
                 return
 
             comparisons += 1
@@ -14,5 +15,6 @@ def bubbleSort(arr, update_visual_callback, quit_call):
                 swapped = True
                 update_visual_callback(arr,j+1,comparisons)
         if swapped == False:
+            print("Algorithm Completed")
             break
 

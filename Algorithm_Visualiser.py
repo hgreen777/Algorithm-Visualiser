@@ -7,7 +7,6 @@ import random
 import math
 
 """TODO"""
-# TODO : Allow the algorithm to be stoped prematurely (and subsequently allow exiting of program) - Button (start/stop button) 
 # TODO : Allow user to control array size & frame-rate with drop down menu - (see dropdown in E/Programming)
 # TODO : Add algorithms and allow user to change the current algorithm.
 # TODO : Polish The implementation
@@ -18,10 +17,11 @@ screenX,useableX = 800, 800
 screenY = 600
 useableY = screenY - 50
 running = True
-array_size = 100
+array_size = 200
 play_btn_center = (30,30)
 play_btn_radius = 25
 txt_location = (play_btn_center[0] + play_btn_radius + 20, play_btn_center[1] - 15)
+framerate = 5000
 
 """PYGAME initialisations"""
 pygame.init()
@@ -55,6 +55,7 @@ def shuffleArray(arr):
 # STATIC VISUALS
 def staticVisuals():
     # Play Button
+    global play_btn
     play_btn = pygame.draw.circle(screen, "Green",play_btn_center, play_btn_radius)
 
 
@@ -71,13 +72,12 @@ def dimensionConstantSet(arr, x,y):
     
 def updateVisual(arr, selected, comparisons):
     screen.fill("Black")    # Resets screen
+    staticVisuals()
 
     # Comparisons
     txt = "#" + str(comparisons) + " Comparisons"
     comp_img = txt_font.render(txt, True, "White")
     screen.blit(comp_img, txt_location)
-
-    staticVisuals()
 
     '''Updates the visual based of an array at a given point.'''
     for index, item in enumerate(arr):
@@ -95,7 +95,7 @@ def updateVisual(arr, selected, comparisons):
         pygame.draw.rect(screen, colour, dimensions)
     
     pygame.display.flip()
-    clock.tick(120)
+    clock.tick(framerate)
 
 
 """Setting up for Game Loop"""
@@ -106,15 +106,18 @@ dimensionConstantSet(a, useableX, useableY)
 
 
 """GAME LOOP"""
-sorting_started = False
+sorting = False
+updateVisual(a,0,0)
+isPlayBTNclicked = False
 
 def playBtnClick():
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_pos = event.pos
+            x,y = pygame.mouse.get_pos()
+            distance = math.sqrt((x - play_btn_center[0]) ** 2 + (y - play_btn_center[1]) ** 2)
 
-            distance = math.sqrt((mouse_pos[0] - play_btn_center[0]) ** 2 + (mouse_pos[1] - play_btn_center[1]) ** 2)
-            if distance < play_btn_radius:
+            if distance <= play_btn_radius:
+                print("click detected")
                 return True
             
     return False
@@ -123,21 +126,24 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x,y = pygame.mouse.get_pos()
+            distance = math.sqrt((x - play_btn_center[0]) ** 2 + (y - play_btn_center[1]) ** 2)
 
-    isPlayBTNclicked = playBtnClick
+            if distance <= play_btn_radius:
+                isPlayBTNclicked = True
     
-    if isPlayBTNclicked and not sorting_started:
-        sorting_started = False
-    elif isPlayBTNclicked and sorting_started:
-        bubbleSort(a, updateVisual, playBtnClick)
-        sorting_started = True
-
-
-
-    if not sorting_started:    
-        bubbleSort(a, updateVisual, playBtnClick)
-        sorting_started = True
+    if isPlayBTNclicked and not sorting:
+        print("Starting Algoirthm")
+        sorting = True
+        a = shuffleArray(a)
+        bubbleSort(a, updateVisual, playBtnClick) 
+    elif isPlayBTNclicked and sorting:
+        sorting = False
+    
+    isPlayBTNclicked = False
 
     pygame.display.flip()   
+    clock.tick(framerate)
 
 pygame.quit()
