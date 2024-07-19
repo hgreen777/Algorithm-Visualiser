@@ -28,10 +28,13 @@ def shuffleArray(arr):
     #https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
     
     n = len(arr)
+    n -= 1
 
-    for i in range(0, n-2):
+    for i in range(0, n-1):
         j = random.randint(i, n)
         arr[i], arr[j] = arr[j], arr[i]
+    
+    return arr
 
 """UPDATING VISUALS"""
 def dimensionConstantSet(arr, x,y):
@@ -57,6 +60,7 @@ def updateVisual(arr):
         pygame.draw.rect(screen, "White", dimensions)
 
 a = createArray(arraySize)
+a = shuffleArray(a)
 dimensionConstantSet(a, screenX, screenY)
 
 """GAME LOOP"""
