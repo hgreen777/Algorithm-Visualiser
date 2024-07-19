@@ -7,21 +7,22 @@ import random
 import math
 
 """TODO"""
-# TODO : Allow user to control array size & frame-rate with drop down menu - (see dropdown in E/Programming)
 # TODO : Add algorithms and allow user to change the current algorithm.
 # TODO : Polish The implementation
 # TODO : Add music ...
 
 """Constants initialisations"""
-screenX,useableX = 800, 800
+framerate = 1000000000000
+array_size = 1000
+
+screenX,useableX = 2000, 2000
 screenY = 600
 useableY = screenY - 50
 running = True
-array_size = 200
+
 play_btn_center = (30,30)
 play_btn_radius = 25
 txt_location = (play_btn_center[0] + play_btn_radius + 20, play_btn_center[1] - 15)
-framerate = 5000
 
 """PYGAME initialisations"""
 pygame.init()
@@ -101,7 +102,7 @@ def updateVisual(arr, selected, comparisons):
 """Setting up for Game Loop"""
 # Creating & Shuffling array to be used by sorting algorithm.
 a = createArray(array_size)
-a = shuffleArray(a)
+#a = shuffleArray(a)
 dimensionConstantSet(a, useableX, useableY)
 
 
@@ -134,6 +135,7 @@ while running:
                 isPlayBTNclicked = True
     
     if isPlayBTNclicked and not sorting:
+        # Starting algo or restarting algo
         print("Starting Algoirthm")
         sorting = True
         a = shuffleArray(a)
