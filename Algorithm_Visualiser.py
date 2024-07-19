@@ -5,11 +5,18 @@ from Algorithms import bubbleSort
 import Algorithms
 import random
 
+"""TODO"""
+# TODO : Allow the algorithm to be stoped prematurely (and subsequently allow exiting of program) - Button (start/stop button) 
+# TODO : Count & Show Comparisons. 
+# TODO : Allow user to control array size & frame-rate with drop down menu - (see dropdown in E/Programming)
+# TODO : Add algorithms and allow user to change the current algorithm.
+
 """Constants and initialisation of pygame """
-screenX = 400
+screenX,useableX = 800, 800
 screenY = 600
+useableY = screenY - 50
 running = True
-arraySize = 400
+array_size = 100
 
 pygame.init()
 screen = pygame.display.set_mode((screenX,screenY))     #Useable 500, 400
@@ -48,7 +55,7 @@ def dimensionConstantSet(arr, x,y):
 
     # BEWARE IF VARIABLE, CONSTANTS MAY NOT PRODUCE INTEGERS, POTENTIALLY BREAKING SYSTEM
     
-def updateVisual(arr):
+def updateVisual(arr, selected):
     screen.fill("Black")    # Resets screen
 
     '''Updates the visual based of an array at a given point.'''
@@ -58,26 +65,38 @@ def updateVisual(arr):
         left = index * width
         top = screenY - height
 
+        colour = "White"
+        if index == selected:
+            colour = "Red"
+
         # Cretae rect & draw to screen
         dimensions = pygame.Rect(left, top, width, height)
-        pygame.draw.rect(screen, "White", dimensions)
+        pygame.draw.rect(screen, colour, dimensions)
     
-    clock.tick(5)
+    pygame.display.flip()
+    clock.tick(120)
 
-a = createArray(arraySize)
+# Creating & Shuffling array to be used by sorting algorithm.
+a = createArray(array_size)
 a = shuffleArray(a)
-dimensionConstantSet(a, screenX, screenY)
+dimensionConstantSet(a, useableX, useableY)
 
 """GAME LOOP"""
-bubbleSort(a)
+sorting_started = False
+
+def quitCheck():
+    return False
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
 
-    pygame.display.flip()
+    if not sorting_started:    
+        bubbleSort(a, updateVisual, quitCheck)
+        sorting_started = False
 
-    clock.tick(5)    
+    pygame.display.flip()   
 
 pygame.quit()
