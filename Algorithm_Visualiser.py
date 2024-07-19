@@ -9,6 +9,7 @@ import math
 """TODO"""
 # TODO : Add algorithms and allow user to change the current algorithm.
 # TODO : Polish The implementation
+# TODO : The waffle in the features.
 # TODO : Add music ...
 
 """Constants initialisations"""

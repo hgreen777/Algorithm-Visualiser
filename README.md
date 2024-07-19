@@ -4,12 +4,15 @@ Visualise Sort &amp; Search Algorithms. [Python]
 # 🧾 Features
 - Select an algorithm
 - Play/Stop an algorithm
-- Step through an algorithm
+- Step through an algorithm ? (One frame at a time?)
 - Show the current state of the array [algorithm]
 - Show the cursor (pointer) position
 
 
-# 🧑‍🏫 idk How to Use?
+# 🧑‍🏫 Usage
+- To change the algorithm, array size, framerate or/and screen size, edit the variable in Algorithm_Visualiser.
+- The green button will stop the algorithm if an algorithm is in progress. 
+- If no algorithm is in process, it will be reset (ie re-shuffled and sort started again from beginning)
 
 # 👨‍💻 Algorithms Included
 - Linear Search
@@ -24,4 +27,3 @@ Visualise Sort &amp; Search Algorithms. [Python]
 - Heap Sort
 - Counting Sort
 - Bogo Sort
-
