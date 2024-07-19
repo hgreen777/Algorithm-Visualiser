@@ -10,6 +10,8 @@ import random
 # TODO : Count & Show Comparisons. 
 # TODO : Allow user to control array size & frame-rate with drop down menu - (see dropdown in E/Programming)
 # TODO : Add algorithms and allow user to change the current algorithm.
+# TODO : Polish The implementation
+# TODO : Add music ...
 
 """Constants and initialisation of pygame """
 screenX,useableX = 800, 800
