@@ -13,13 +13,14 @@ import random
 # TODO : Polish The implementation
 # TODO : Add music ...
 
-"""Constants and initialisation of pygame """
+"""Constants initialisations"""
 screenX,useableX = 800, 800
 screenY = 600
 useableY = screenY - 50
 running = True
 array_size = 100
 
+"""PYGAME initialisations"""
 pygame.init()
 screen = pygame.display.set_mode((screenX,screenY))     #Useable 500, 400
 pygame.display.set_caption("Algorithm Visualiser")
@@ -78,10 +79,13 @@ def updateVisual(arr, selected):
     pygame.display.flip()
     clock.tick(120)
 
+
+"""Setting up for Game Loop"""
 # Creating & Shuffling array to be used by sorting algorithm.
 a = createArray(array_size)
 a = shuffleArray(a)
 dimensionConstantSet(a, useableX, useableY)
+
 
 """GAME LOOP"""
 sorting_started = False
