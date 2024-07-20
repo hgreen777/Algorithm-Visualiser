@@ -2,9 +2,9 @@
 import time
 import pygame
 from Algorithms import bubbleSort
-import Algorithms
 import random
 import math
+import numpy as np
 
 """TODO"""
 # TODO : Add algorithms and allow user to change the current algorithm.
@@ -14,7 +14,7 @@ import math
 
 """Constants initialisations"""
 framerate = 1000000000000
-array_size = 1000
+array_size = 50
 current_algorithm = bubbleSort
 
 screenX,useableX = 2000, 2000
@@ -67,13 +67,13 @@ def dimensionConstantSet(arr, x,y):
     # BEWARE IF VARIABLE, CONSTANTS MAY NOT PRODUCE INTEGERS, POTENTIALLY BREAKING SYSTEM
 
 # DYNAMIC visuals
-def updateVisual(arr, selected, comparisons):
+def updateVisual(arr, selected, metrics):
     global play_btn
     screen.fill("Black")    # Resets screen
     play_btn = pygame.draw.circle(screen, "Green",play_btn_center, play_btn_radius) # Draw the start/stop button
 
     # Comparisons
-    txt = "#" + str(comparisons) + " Comparisons"
+    txt = "#" + str(metrics[0]) + " Comparisons" + "   " + "#" + str(metrics[1]) + " Array Accesses"
     comp_img = txt_font.render(txt, True, "White")
     screen.blit(comp_img, txt_location)
 
@@ -101,7 +101,7 @@ def updateVisual(arr, selected, comparisons):
 a = createArray(array_size)
 a = shuffleArray(a)        # Comment out if array is wanted to be sorted at first.
 dimensionConstantSet(a, useableX, useableY)
-updateVisual(a,0,0) # Initial view of array (sorted or not depending on if shuffled in previous line.)
+updateVisual(a,0,[0,0]) # Initial view of array (sorted or not depending on if shuffled in previous line.)
 
 sorting = False
 isPlayBTNclicked = False
@@ -130,6 +130,15 @@ while running:
 
             if distance <= play_btn_radius:
                 isPlayBTNclicked = True
+
+    pygame.mixer.init(size=32)
+
+    buffer = np.sin(2 * np.pi * np.arange(44100) * 440 / 44100).astype(np.float32)
+    sound = pygame.mixer.Sound(buffer)
+    sound.set_volume(0.01)
+
+    sound.play(0)
+    pygame.time.wait(int(sound.get_length() * 1000))
     
     if isPlayBTNclicked and not sorting:
         # Starting algo or restarting algo
