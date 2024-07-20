@@ -1,10 +1,11 @@
 #Imports 
 import time
 import pygame
-from Algorithms import bubbleSort
+from Algorithms import bubbleSort, linearSearch
 import random
 import math
 import numpy as np
+import pyaudio
 
 """TODO"""
 # TODO : Add algorithms and allow user to change the current algorithm.
@@ -13,9 +14,10 @@ import numpy as np
 # TODO : Add music ...
 
 """Constants initialisations"""
-framerate = 1000000000000
+framerate = 10000
 array_size = 50
-current_algorithm = bubbleSort
+current_algorithm = linearSearch
+launch_with_sorted_array = False
 
 screenX,useableX = 2000, 2000
 screenY = 600
@@ -27,6 +29,7 @@ play_btn_radius = 25
 txt_location = (play_btn_center[0] + play_btn_radius + 20, play_btn_center[1] - 15)
 
 """PYGAME initialisations"""
+p = pyaudio.PyAudio()
 pygame.init()
 screen = pygame.display.set_mode((screenX,screenY))     #Useable 500, 400
 pygame.display.set_caption("Algorithm Visualiser")
@@ -53,6 +56,22 @@ def shuffleArray(arr):
         arr[i], arr[j] = arr[j], arr[i]
     
     return arr
+
+def generate_tone(frequency, duration, sample_rate=44100):
+    t = np.linspace(0, duration, int(sample_rate * duration), endpoint=False)
+    wave = 0.5 * np.sin(2 * np.pi * frequency * t)
+    return wave
+
+def play_tone(frequency, duration):
+    wave = generate_tone(frequency, duration)
+    stream = p.open(format=pyaudio.paFloat32,
+                    channels=1,
+                    rate=44100,
+                    output=True)
+    stream.write(wave.astype(np.float32).tobytes())
+    stream.stop_stream()
+    stream.close()
+
 
 """UPDATING VISUALS"""
 # DYNAMIC Values
@@ -91,15 +110,18 @@ def updateVisual(arr, selected, metrics):
         # Cretae rect & draw to screen
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
-    
+
+    play_tone(10 * selected+200, 0.1)
     pygame.display.flip()
     clock.tick(framerate)
+
 
 
 """Setting up for Game Loop"""
 # Creating & Shuffling array to be used by sorting algorithm.
 a = createArray(array_size)
-a = shuffleArray(a)        # Comment out if array is wanted to be sorted at first.
+if launch_with_sorted_array:
+    a = shuffleArray(a)
 dimensionConstantSet(a, useableX, useableY)
 updateVisual(a,0,[0,0]) # Initial view of array (sorted or not depending on if shuffled in previous line.)
 
@@ -131,15 +153,7 @@ while running:
             if distance <= play_btn_radius:
                 isPlayBTNclicked = True
 
-    pygame.mixer.init(size=32)
 
-    buffer = np.sin(2 * np.pi * np.arange(44100) * 440 / 44100).astype(np.float32)
-    sound = pygame.mixer.Sound(buffer)
-    sound.set_volume(0.01)
-
-    sound.play(0)
-    pygame.time.wait(int(sound.get_length() * 1000))
-    
     if isPlayBTNclicked and not sorting:
         # Starting algo or restarting algo
         print("Starting Algoirthm")

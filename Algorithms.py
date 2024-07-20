@@ -1,3 +1,4 @@
+import random
 
 def bubbleSort(arr, update_visual_callback, quit_call):
     n = len(arr) 
@@ -20,4 +21,25 @@ def bubbleSort(arr, update_visual_callback, quit_call):
         if swapped == False:
             print("Algorithm Completed")
             break
+
+def linearSearch(arr, update_visual_callback,quit_call):
+    comparisons = 0
+    array_accesses = 0
+    searchValue = random.randint(1, len(arr))
+    print(f"looking for: {searchValue}")
+    for i in range(len(arr)):
+        if quit_call():
+                print("Stopping Algorithm")
+                return
+        
+        array_accesses += 1
+        comparisons += 1
+
+        update_visual_callback(arr,i,[comparisons,array_accesses])
+        if arr[i] == searchValue:
+            print("Element Found")
+            return
+    
+    print("Error: Element not in array")
+    return
 
