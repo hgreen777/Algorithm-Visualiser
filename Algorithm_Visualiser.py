@@ -5,19 +5,17 @@ from Algorithms import bubbleSort, linearSearch, binarySearch
 import random
 import math
 import numpy as np
-import pyaudio
 import winsound
 
 """TODO"""
-# TODO : Add algorithms and allow user to change the current algorithm.
+# TODO : Add algorithms.
 # TODO : Polish The implementation
-# TODO : The waffle in the features.
-# TODO : Add music ...
+# TODO : Polish Music (Frequency)
 
 """Constants initialisations"""
-framerate = 10000
-array_size = 1000       # Cannot be bigger then the useable X
-current_algorithm = linearSearch
+framerate = 100000
+array_size = 50     # Cannot be bigger then the useable X
+current_algorithm = bubbleSort
 launch_with_sorted_array = True
 sorted_array_for_algo = False
 
@@ -31,7 +29,6 @@ play_btn_radius = 25
 txt_location = (play_btn_center[0] + play_btn_radius + 20, play_btn_center[1] - 15)
 
 """PYGAME initialisations"""
-p = pyaudio.PyAudio()
 pygame.init()
 screen = pygame.display.set_mode((screenX,screenY))     #Useable 500, 400
 pygame.display.set_caption("Algorithm Visualiser")
@@ -58,21 +55,6 @@ def shuffleArray(arr):
         arr[i], arr[j] = arr[j], arr[i]
     
     return arr
-
-def generate_tone(frequency, duration, sample_rate=44100):
-    t = np.linspace(0, duration, int(sample_rate * duration), endpoint=False)
-    wave = 0.5 * np.sin(2 * np.pi * frequency * t)
-    return wave
-
-def play_tone(frequency, duration):
-    wave = generate_tone(frequency, duration)
-    stream = p.open(format=pyaudio.paFloat32,
-                    channels=1,
-                    rate=44100,
-                    output=True)
-    stream.write(wave.astype(np.float32).tobytes())
-    stream.stop_stream()
-    stream.close()
 
 
 """UPDATING VISUALS"""
@@ -106,18 +88,42 @@ def updateVisual(arr, selected, metrics):
         top = screenY - height
 
         colour = "White"
-        if index == selected:
+        if index in selected:
             colour = "Red"
+
 
         # Cretae rect & draw to screen
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
 
-    #play_tone(10 * selected+200, 0.1)
-    winsound.Beep(10 * selected+2000, 1)
+    frequency = 10 * selected[0]+2000
+    winsound.Beep(frequency, 1)
     pygame.display.flip()
     clock.tick(framerate)
 
+def finishedVisual(arr, current, flipped):
+    total = len(flipped)
+    for index, item in enumerate(arr):
+        # Calculatre variable dimensions
+        height = item * height_interval
+        left = index * width
+        top = screenY - height
+
+        colour = "White"
+        if index <= total:
+            colour = "Green"
+        if index == current:
+            colour = "Red"
+
+
+        # Cretae rect & draw to screen
+        dimensions = pygame.Rect(left, top, width, height)
+        pygame.draw.rect(screen, colour, dimensions)
+
+    frequency = 10 * current + 2000
+    winsound.Beep(frequency, 1)
+    pygame.display.flip()
+    clock.tick(framerate)
 
 
 """Setting up for Game Loop"""
@@ -126,7 +132,7 @@ a = createArray(array_size)
 if not launch_with_sorted_array:
     a = shuffleArray(a)
 dimensionConstantSet(a, useableX, useableY)
-updateVisual(a,0,[0,0]) # Initial view of array (sorted or not depending on if shuffled in previous line.)
+updateVisual(a,[0],[0,0]) # Initial view of array (sorted or not depending on if shuffled in previous line.)
 
 sorting = False
 isPlayBTNclicked = False
@@ -163,7 +169,14 @@ while running:
         sorting = True
         if not sorted_array_for_algo:
             a = shuffleArray(a)
-        current_algorithm(a, updateVisual, playBtnClick)
+        is_sorted = current_algorithm(a, updateVisual, playBtnClick)
+
+        if is_sorted:
+            allEll = []
+            # Show Complete Algorithm
+            for i in range(len(a)):
+                finishedVisual(a, i, allEll)
+                allEll.append(i)
     elif isPlayBTNclicked and sorting:
         # If the button is clicked and sorting is occuring, stop it. 
         sorting = False

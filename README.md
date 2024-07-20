@@ -4,7 +4,6 @@ Visualise Sort &amp; Search Algorithms. [Python]
 # 🧾 Features
 - Select an algorithm
 - Play/Stop an algorithm
-- Step through an algorithm ? (One frame at a time?)
 - Show the current state of the array [algorithm]
 - Show the cursor (pointer) position
 
