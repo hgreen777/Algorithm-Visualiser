@@ -1,11 +1,12 @@
 #Imports 
 import time
 import pygame
-from Algorithms import bubbleSort, linearSearch
+from Algorithms import bubbleSort, linearSearch, binarySearch
 import random
 import math
 import numpy as np
 import pyaudio
+import winsound
 
 """TODO"""
 # TODO : Add algorithms and allow user to change the current algorithm.
@@ -15,11 +16,12 @@ import pyaudio
 
 """Constants initialisations"""
 framerate = 10000
-array_size = 50
+array_size = 1000       # Cannot be bigger then the useable X
 current_algorithm = linearSearch
-launch_with_sorted_array = False
+launch_with_sorted_array = True
+sorted_array_for_algo = False
 
-screenX,useableX = 2000, 2000
+screenX,useableX = 2500, 2500
 screenY = 600
 useableY = screenY - 50
 running = True
@@ -111,7 +113,8 @@ def updateVisual(arr, selected, metrics):
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
 
-    play_tone(10 * selected+200, 0.1)
+    #play_tone(10 * selected+200, 0.1)
+    winsound.Beep(10 * selected+2000, 1)
     pygame.display.flip()
     clock.tick(framerate)
 
@@ -120,7 +123,7 @@ def updateVisual(arr, selected, metrics):
 """Setting up for Game Loop"""
 # Creating & Shuffling array to be used by sorting algorithm.
 a = createArray(array_size)
-if launch_with_sorted_array:
+if not launch_with_sorted_array:
     a = shuffleArray(a)
 dimensionConstantSet(a, useableX, useableY)
 updateVisual(a,0,[0,0]) # Initial view of array (sorted or not depending on if shuffled in previous line.)
@@ -158,7 +161,8 @@ while running:
         # Starting algo or restarting algo
         print("Starting Algoirthm")
         sorting = True
-        a = shuffleArray(a)
+        if not sorted_array_for_algo:
+            a = shuffleArray(a)
         current_algorithm(a, updateVisual, playBtnClick)
     elif isPlayBTNclicked and sorting:
         # If the button is clicked and sorting is occuring, stop it. 
