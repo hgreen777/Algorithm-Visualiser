@@ -29,3 +29,8 @@ BEWARE:: DO NOT HAVE VOLUME SET TO A HIGH LEVEL!!!
 - Heap Sort
 - Counting Sort
 - Bogo Sort
+
+# Future
+- Final Visual update actually checks if the array is ordered correctly.
+- Boost FPS
+- Doesn't reshuffle if programmed launched with shuffle.
