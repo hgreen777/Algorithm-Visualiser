@@ -1,6 +1,9 @@
 # Algorithm-Visualiser
 Visualise Sort &amp; Search Algorithms. [Python]
 
+BEWARE:: DO NOT HAVE VOLUME SET TO A HIGH LEVEL!!!
+    THE SOUND USED IS NOT PLEASENT SO TURN VOLUME DOWN!!!
+
 # 🧾 Features
 - Select an algorithm
 - Play/Stop an algorithm

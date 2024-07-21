@@ -5,7 +5,6 @@ from Algorithms import bubbleSort, linearSearch, binarySearch
 import random
 import math
 import numpy as np
-import winsound
 
 """TODO"""
 # TODO : Add algorithms.
@@ -13,8 +12,8 @@ import winsound
 # TODO : Polish Music (Frequency)
 
 """Constants initialisations"""
-framerate = 160
-array_size = 50     # Cannot be bigger then the useable X
+framerate = 5000
+array_size = 500     # Cannot be bigger then the useable X
 current_algorithm = bubbleSort
 launch_with_sorted_array = True
 sorted_array_for_algo = False
@@ -27,11 +26,12 @@ running = True
 # Calculating constants based on var
 height_interval = useableY / array_size
 width = useableX / array_size
-freq_range = 32730 # Range 37-32767
+freq_range = 400
 duration_seconds = 1 / framerate
 duration_ms = duration_seconds * 1000
 if duration_ms < 1:
     duration_ms = 1
+tone_cache = {}
 
 play_btn_center = (30,30)
 play_btn_radius = 25
@@ -62,11 +62,15 @@ def generate_tone(frequency, duration_ms):
     return sound
 
 
-def value_to_frequency(value, min_value, max_value, min_freq=10, max_freq=400):
+def value_to_frequency(value, min_value, max_value, min_freq=10, max_freq=200):
     # Map value to frequency in the given range
     return min_freq + (max_freq - min_freq) * ((value - min_value) / (max_value - min_value))
 
-
+def get_cached_tone(frequency):
+    if frequency not in tone_cache:
+        tone_cache[frequency] = generate_tone(frequency,100)
+    
+    return tone_cache[frequency]
 
 """ARRAY CREATION & HANDLING"""
 def createArray(size):
@@ -103,22 +107,18 @@ def dimensionConstantSet(arr, x,y):
     # BEWARE IF VARIABLE, CONSTANTS MAY NOT PRODUCE INTEGERS, POTENTIALLY BREAKING SYSTEM
 
 # DYNAMIC visuals
-def updateVisual(arr, selected, metrics):
-    frequency = value_to_frequency(selected[1], 1, len(arr))
-    tone = generate_tone(frequency, 100)  # 100 ms duration
-    tone.play()
-    pygame.time.delay(100)  # Ensure the sound has time to play
-    
+def updateVisual(arr, selected, metrics):    
     global play_btn
     screen.fill("Black")    # Resets screen
     play_btn = pygame.draw.circle(screen, "Green",play_btn_center, play_btn_radius) # Draw the start/stop button
 
-    # Comparisons
-    txt = "#" + str(metrics[0]) + " Comparisons" + "   " + "#" + str(metrics[1]) + " Array Accesses"
-    comp_img = txt_font.render(txt, True, "White")
-    screen.blit(comp_img, txt_location)
+    # Comparisons & Array Access Display
+    txt = f"#{metrics[0]} Comparisons   #{metrics[1]} Array Accesses"
+    txt_img = txt_font.render(txt, True, "White")
+    screen.blit(txt_img, txt_location)
 
-    txt = str(int(clock.get_fps())) + " FPS"
+    # FPS Display
+    txt = f"{int(clock.get_fps())} FPS"
     txt_img = txt_font.render(txt, True, "Green")
     fps_rect =  txt_img.get_rect(topright=(screenX - 10, 10))
     screen.blit(txt_img,fps_rect)
@@ -139,10 +139,11 @@ def updateVisual(arr, selected, metrics):
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
 
-    factor = selected[1] / len(arr)
-    frequency = int(factor * freq_range) + 37 
-    # Some math her to make it use the whole spectrum using the max and min values and then mapping that onto available values.
-    #winsound.Beep(frequency, 3)
+    frequency = value_to_frequency(selected[1], 1, len(arr))
+    tone = get_cached_tone(frequency)
+    tone.play()
+    #pygame.time.delay(100)  # Ensure the sound has time to play
+
     pygame.display.flip()
     clock.tick(framerate)
 
@@ -165,8 +166,12 @@ def finishedVisual(arr, current, flipped):
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
 
-    frequency = 10 * current + 2000
-    winsound.Beep(frequency, 1)
+    frequency = value_to_frequency(current, 1, len(arr))
+    tone = generate_tone(frequency, 100)  # 100 ms duration
+    tone.play()
+    #pygame.time.delay(100)  # Ensure the sound has time to play
+    
+
     pygame.display.flip()
     clock.tick(framerate)
 
