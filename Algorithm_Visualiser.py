@@ -8,16 +8,17 @@ import numpy as np
 
 """TODO"""
 # TODO : Add algorithms.
-# TODO : Polish The implementation
-# TODO : Polish Music (Frequency)
+# TODO : Clean Code
+
+"""User Defined Variables - Customise to personal liking"""
+framerate = 750                     # Advise < 1000 (unlikely pc will be quick enough). Try to match the framerate with the actual to make it more efficient like with games, capping the fps makes it smoother.
+array_size = 100                    # Cannot be bigger then the useable X (advised size depends on sorting/searching algorithm used).
+current_algorithm = bubbleSort      # Pick the current running algo.
+launch_with_sorted_array = True     # When the program launches if this is true the array will be shown in its final state, sorted. (If false, array is reshuffled anyway before starting algo (purely aesthetic)).
+sorted_array_for_algo = False       # Does the algorithm need a sorted array to run.
+disable_sound = False               # Enable/Disable Sound.
 
 """Constants initialisations"""
-framerate = 5000
-array_size = 50    # Cannot be bigger then the useable X
-current_algorithm = bubbleSort
-launch_with_sorted_array = True
-sorted_array_for_algo = False
-
 screenX,useableX = 2500, 2500
 screenY = 600
 useableY = screenY - 50
@@ -27,10 +28,11 @@ running = True
 height_interval = useableY / array_size
 width = useableX / array_size
 freq_range = 400
-duration_seconds = 1 / framerate
-duration_ms = duration_seconds * 1000
-if duration_ms < 1:
-    duration_ms = 1
+
+duration_ms = 100
+sample_rate = 44100  # Hertz
+n_samples = int(sample_rate * duration_ms / 1000)
+t = np.linspace(0, duration_ms / 1000, n_samples, False)
 tone_cache = {}
 
 play_btn_center = (30,30)
@@ -42,35 +44,32 @@ pygame.init()
 screen = pygame.display.set_mode((screenX,screenY))     #Useable 500, 400
 pygame.display.set_caption("Algorithm Visualiser")
 txt_font = pygame.font.Font(None, 40)
-pygame.mixer.init(frequency=44100, size=-16, buffer=512)
+pygame.mixer.init(frequency=44100, size=-16,channels=1, buffer=256)
 clock = pygame.time.Clock()
 
-def generate_tone(frequency, duration_ms):
-    sample_rate = 44100  # Hertz
-    n_samples = int(sample_rate * duration_ms / 1000)
-    t = np.linspace(0, duration_ms / 1000, n_samples, False)
 
-    # Generate a sine wave at the given frequency
-    waveform = 32767 * np.sin(2 * np.pi * frequency * t)
+"""Sound Manager"""
+# Convert a frequency into a tone
+def generate_tone(frequency):
 
-    # Convert to 16-bit data
-    waveform = waveform.astype(np.int16)
+    # Generate a sine wave at the given frequency & convert to 16-bit data
+    waveform = (32767 * np.sin(2 * np.pi * frequency * t)).astype(np.int16)
 
-    # Ensure waveform is 2D (stereo sound with same values for both channels)
-    waveform_stereo = np.column_stack((waveform, waveform))
-    sound = pygame.mixer.Sound(waveform)
+    sound = pygame.mixer.Sound(waveform)        # Create sound
+
     return sound
 
-
-def value_to_frequency(value, min_value, max_value, min_freq=10, max_freq=200):
+# Calculate the frequency value
+def value_to_frequency(value, min_value=1, max_value=array_size, min_freq=0, max_freq=200):
     # Map value to frequency in the given range
     return min_freq + (max_freq - min_freq) * ((value - min_value) / (max_value - min_value))
 
 def get_cached_tone(frequency):
     if frequency not in tone_cache:
-        tone_cache[frequency] = generate_tone(frequency,100)
+        tone_cache[frequency] = generate_tone(frequency)
     
     return tone_cache[frequency]
+
 
 """ARRAY CREATION & HANDLING"""
 def createArray(size):
@@ -128,10 +127,10 @@ def updateVisual(arr, selected, metrics):
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
 
-    frequency = value_to_frequency(selected[1], 1, len(arr))
-    tone = get_cached_tone(frequency)
-    tone.play()
-    #pygame.time.delay(100)  # Ensure the sound has time to play
+    if not disable_sound:
+        frequency = value_to_frequency(selected[0])
+        tone = get_cached_tone(frequency)
+        tone.play()
 
     pygame.display.flip()
     clock.tick(framerate)
@@ -156,10 +155,10 @@ def finishedVisual(arr, current, flipped):
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
 
-    frequency = value_to_frequency(current, 1, len(arr))
-    tone = generate_tone(frequency, 100)  # 100 ms duration
-    tone.play()
-    #pygame.time.delay(100)  # Ensure the sound has time to play
+    if not disable_sound:
+        frequency = value_to_frequency(current)
+        tone = generate_tone(frequency)  # 100 ms duration
+        tone.play()
     
 
     pygame.display.flip()
