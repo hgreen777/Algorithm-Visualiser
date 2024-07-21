@@ -13,7 +13,7 @@ import numpy as np
 
 """Constants initialisations"""
 framerate = 5000
-array_size = 500     # Cannot be bigger then the useable X
+array_size = 50    # Cannot be bigger then the useable X
 current_algorithm = bubbleSort
 launch_with_sorted_array = True
 sorted_array_for_algo = False
@@ -95,17 +95,6 @@ def shuffleArray(arr):
 
 
 """UPDATING VISUALS"""
-# DYNAMIC Values
-def dimensionConstantSet(arr, x,y):
-    '''Updates the constant dimensions used to draw the square arrays.
-       Used when the array size changes.                                '''
-    global height_interval, width
-    # Semi Constants For Box Dimenstions
-    height_interval = y / len(arr)
-    width = x / len(arr)
-
-    # BEWARE IF VARIABLE, CONSTANTS MAY NOT PRODUCE INTEGERS, POTENTIALLY BREAKING SYSTEM
-
 # DYNAMIC visuals
 def updateVisual(arr, selected, metrics):    
     global play_btn
@@ -147,6 +136,7 @@ def updateVisual(arr, selected, metrics):
     pygame.display.flip()
     clock.tick(framerate)
 
+# vv Purely Visual (doesn't actually check if sorted, jus trust bro)
 def finishedVisual(arr, current, flipped):
     total = len(flipped)
     for index, item in enumerate(arr):
@@ -181,7 +171,6 @@ def finishedVisual(arr, current, flipped):
 a = createArray(array_size)
 if not launch_with_sorted_array:
     a = shuffleArray(a)
-#dimensionConstantSet(a, useableX, useableY)
 updateVisual(a,[0,0],[0,0]) # Initial view of array (sorted or not depending on if shuffled in previous line.)
 
 sorting = False
@@ -225,6 +214,8 @@ while running:
             allEll = []
             # Show Complete Algorithm
             for i in range(len(a)):
+                if playBtnClick():
+                    break
                 finishedVisual(a, i, allEll)
                 allEll.append(i)
     elif isPlayBTNclicked and sorting:
