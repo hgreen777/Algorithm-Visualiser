@@ -17,6 +17,7 @@ def bubbleSort(arr, update_visual_callback, quit_call):
                 arr[j], arr[j+1] = arr[j+1],arr[j]
                 swapped = True
                 array_accesses += 4
+
                 update_visual_callback(arr,[j,j+1],[comparisons,array_accesses])
         if swapped == False:
             print("Algorithm Completed")

@@ -13,7 +13,7 @@ import winsound
 # TODO : Polish Music (Frequency)
 
 """Constants initialisations"""
-framerate = 100000
+framerate = 160
 array_size = 50     # Cannot be bigger then the useable X
 current_algorithm = bubbleSort
 launch_with_sorted_array = True
@@ -24,6 +24,15 @@ screenY = 600
 useableY = screenY - 50
 running = True
 
+# Calculating constants based on var
+height_interval = useableY / array_size
+width = useableX / array_size
+freq_range = 32730 # Range 37-32767
+duration_seconds = 1 / framerate
+duration_ms = duration_seconds * 1000
+if duration_ms < 1:
+    duration_ms = 1
+
 play_btn_center = (30,30)
 play_btn_radius = 25
 txt_location = (play_btn_center[0] + play_btn_radius + 20, play_btn_center[1] - 15)
@@ -33,7 +42,31 @@ pygame.init()
 screen = pygame.display.set_mode((screenX,screenY))     #Useable 500, 400
 pygame.display.set_caption("Algorithm Visualiser")
 txt_font = pygame.font.Font(None, 40)
+pygame.mixer.init(frequency=44100, size=-16, buffer=512)
 clock = pygame.time.Clock()
+
+def generate_tone(frequency, duration_ms):
+    sample_rate = 44100  # Hertz
+    n_samples = int(sample_rate * duration_ms / 1000)
+    t = np.linspace(0, duration_ms / 1000, n_samples, False)
+
+    # Generate a sine wave at the given frequency
+    waveform = 32767 * np.sin(2 * np.pi * frequency * t)
+
+    # Convert to 16-bit data
+    waveform = waveform.astype(np.int16)
+
+    # Ensure waveform is 2D (stereo sound with same values for both channels)
+    waveform_stereo = np.column_stack((waveform, waveform))
+    sound = pygame.mixer.Sound(waveform)
+    return sound
+
+
+def value_to_frequency(value, min_value, max_value, min_freq=10, max_freq=400):
+    # Map value to frequency in the given range
+    return min_freq + (max_freq - min_freq) * ((value - min_value) / (max_value - min_value))
+
+
 
 """ARRAY CREATION & HANDLING"""
 def createArray(size):
@@ -71,6 +104,11 @@ def dimensionConstantSet(arr, x,y):
 
 # DYNAMIC visuals
 def updateVisual(arr, selected, metrics):
+    frequency = value_to_frequency(selected[1], 1, len(arr))
+    tone = generate_tone(frequency, 100)  # 100 ms duration
+    tone.play()
+    pygame.time.delay(100)  # Ensure the sound has time to play
+    
     global play_btn
     screen.fill("Black")    # Resets screen
     play_btn = pygame.draw.circle(screen, "Green",play_btn_center, play_btn_radius) # Draw the start/stop button
@@ -79,6 +117,11 @@ def updateVisual(arr, selected, metrics):
     txt = "#" + str(metrics[0]) + " Comparisons" + "   " + "#" + str(metrics[1]) + " Array Accesses"
     comp_img = txt_font.render(txt, True, "White")
     screen.blit(comp_img, txt_location)
+
+    txt = str(int(clock.get_fps())) + " FPS"
+    txt_img = txt_font.render(txt, True, "Green")
+    fps_rect =  txt_img.get_rect(topright=(screenX - 10, 10))
+    screen.blit(txt_img,fps_rect)
 
     '''Updates the visual based of an array at a given point.'''
     for index, item in enumerate(arr):
@@ -96,8 +139,10 @@ def updateVisual(arr, selected, metrics):
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
 
-    frequency = 10 * selected[0]+2000
-    winsound.Beep(frequency, 1)
+    factor = selected[1] / len(arr)
+    frequency = int(factor * freq_range) + 37 
+    # Some math her to make it use the whole spectrum using the max and min values and then mapping that onto available values.
+    #winsound.Beep(frequency, 3)
     pygame.display.flip()
     clock.tick(framerate)
 
@@ -131,8 +176,8 @@ def finishedVisual(arr, current, flipped):
 a = createArray(array_size)
 if not launch_with_sorted_array:
     a = shuffleArray(a)
-dimensionConstantSet(a, useableX, useableY)
-updateVisual(a,[0],[0,0]) # Initial view of array (sorted or not depending on if shuffled in previous line.)
+#dimensionConstantSet(a, useableX, useableY)
+updateVisual(a,[0,0],[0,0]) # Initial view of array (sorted or not depending on if shuffled in previous line.)
 
 sorting = False
 isPlayBTNclicked = False
