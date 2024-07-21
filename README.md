@@ -1,5 +1,5 @@
 # Algorithm-Visualiser
-Visualise Sort &amp; Search Algorithms. [Python]
+Visualise Sort &amp; Search Algorithms. [Python][Pygame]
 
 BEWARE!! DO NOT HAVE VOLUME SET TO A HIGH LEVEL!!!
     THE SOUND USED IS NOT PLEASENT SO TURN VOLUME DOWN!!!
