@@ -10,11 +10,11 @@ BEWARE!! DO NOT HAVE VOLUME SET TO A HIGH LEVEL!!!
 - Show the current state of the array [algorithm]
 - Show the cursor (pointer) position
 
-
 # 🧑‍🏫 Usage
 - To change the algorithm, array size, framerate or/and screen size, edit the variable in Algorithm_Visualiser.
 - The green button will stop the algorithm if an algorithm is in progress. 
 - If no algorithm is in process, it will be reset (ie re-shuffled and sort started again from beginning)
+- Ensure if algorithm requires a sorted algorithm, this option is set to "True" else this could break the program.
 
 # 👨‍💻 Algorithms Included
 - Linear Search
@@ -32,4 +32,3 @@ BEWARE!! DO NOT HAVE VOLUME SET TO A HIGH LEVEL!!!
 
 # Future
 - Boost FPS
-- Doesn't reshuffle if programmed launched with shuffle.

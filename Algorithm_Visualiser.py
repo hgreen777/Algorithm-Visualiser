@@ -12,16 +12,16 @@ import numpy as np
 
 """User Defined Variables - Customise to personal liking"""
 framerate = 50                     # Advise < 1000 (unlikely pc will be quick enough). Try to match the framerate with the actual to make it more efficient like with games, capping the fps makes it smoother.
-array_size = 25                    # Cannot be bigger then the useable X (advised size depends on sorting/searching algorithm used).
+array_size = 70                   # Cannot be bigger then the useable X (advised size depends on sorting/searching algorithm used).
 current_algorithm = bubbleSort      # Pick the current running algo.
 launch_with_sorted_array = True     # When the program launches if this is true the array will be shown in its final state, sorted. (If false, array is reshuffled anyway before starting algo (purely aesthetic)).
 sorted_array_for_algo = False       # Does the algorithm need a sorted array to run.
-disable_sound = False               # Enable/Disable Sound.
+disable_sound = True               # Enable/Disable Sound.
 
+screenX,useableX = 2500, 2500       # May need to edit based on monitor, allows bigger array size.
+screenY = 600                       # Will effect the jump size between elements
 
 """Constants initialisations"""
-screenX,useableX = 2500, 2500
-screenY = 600
 useableY = screenY - 50
 running = True
 
@@ -55,16 +55,17 @@ clock = pygame.time.Clock()
 # Convert a frequency into a tone
 def generate_tone(frequency):
 
-    # Generate a sine wave at the given frequency & convert to 16-bit data
+    # Generate a sine wave at the given frequency & convert to 16-bit data      https://en.wikipedia.org/wiki/Sine_wave
     waveform = (32767 * np.sin(2 * np.pi * frequency * t)).astype(np.int16)     # A sin(2pi ft + phase)     - Phase = 0 
 
-    sound = pygame.mixer.Sound(waveform)        # Create sound
+    sound = pygame.mixer.Sound(waveform)        # Create sound using pygame mixer.
 
     return sound
 
 # Calculate the frequency value
 def value_to_frequency(value, min_value=1, max_value=array_size, min_freq=0, max_freq=200):
     # Map value to frequency in the given range
+    # freq_range * ( corrected_value / value_range)
     return min_freq + (max_freq - min_freq) * ((value - min_value) / (max_value - min_value))
 
 # Add frequency to cache to make it more efficient (so tone is only generated once and then it is just accessed and played)
@@ -122,6 +123,7 @@ def updateVisual(arr, selected, metrics):
         left = index * width
         top = screenY - height
 
+        # Sort Colour
         colour = "White"
         if index in selected:
             colour = "Red"
@@ -131,6 +133,7 @@ def updateVisual(arr, selected, metrics):
         dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
 
+    # Play sound
     if not disable_sound:
         frequency = value_to_frequency(selected[0])
         tone = get_cached_tone(frequency)
@@ -139,7 +142,6 @@ def updateVisual(arr, selected, metrics):
     pygame.display.flip()
     clock.tick(framerate)
 
-# vv Purely Visual (doesn't actually check if sorted, jus trust bro)
 # Checks if the array has been sorted.
 def finishedVisual(arr, i, green_bars):
     for index, item in enumerate(arr):
@@ -182,6 +184,7 @@ if not launch_with_sorted_array:
 updateVisual(a,[0,0],[0,0]) # Initial view of array (sorted or not depending on if shuffled in previous line.)
 
 sorting = False
+first_sort = True
 isPlayBTNclicked = False
 
 
@@ -213,9 +216,12 @@ while running:
     if isPlayBTNclicked and not sorting:
         # Starting algo or restarting algo
         print("Starting Algoirthm")
-        sorting = True
-        if not sorted_array_for_algo:
+        if (not sorted_array_for_algo and launch_with_sorted_array) or (not first_sort and not sorted_array_for_algo):
             a = shuffleArray(a)
+
+        sorting = True
+        first_sort = False
+
         is_sorted = current_algorithm(a, updateVisual, playBtnClick)
 
         if is_sorted:
