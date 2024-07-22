@@ -78,7 +78,6 @@ def jumpSearch(arr, update_visual_callback, quit_call):
     array_accesses = 0
     n = len(arr)
     search_value = random.randint(1,n)
-
     print(f"looking for: {search_value}")
 
     i = 0 
@@ -127,3 +126,27 @@ def jumpSearch(arr, update_visual_callback, quit_call):
     return False
 
 
+def bogoSearch(arr, update_visual_callback, quit_call):
+    comparisons = 0
+    array_accesses = 0
+    n = len(arr)
+    search_value = random.randint(1,n)
+    print(f"looking for: {search_value}")
+
+    x = 0
+    found = False
+
+    while not found:
+        if quit_call():
+            print("Stopping Algorithm")
+        
+        x = random.randint(0,n - 1)
+
+        comparisons += 1
+        array_accesses += 1
+        update_visual_callback(arr, [x],[comparisons,array_accesses])
+
+        if arr[x] == search_value:
+            print("Element Found")
+            return False
+        
