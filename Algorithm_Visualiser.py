@@ -142,7 +142,6 @@ def updateVisual(arr, selected, metrics):
 # vv Purely Visual (doesn't actually check if sorted, jus trust bro)
 # Checks if the array has been sorted.
 def finishedVisual(arr, i, green_bars):
-    #updated_rects = []
     for index, item in enumerate(arr):
         # Calculatre variable dimensions
         height = item * height_interval
@@ -157,10 +156,8 @@ def finishedVisual(arr, i, green_bars):
         if item == (i+1) and index == i:
             colour = "Green"
             green_bars[index] = True
-            #updated_rects.append(dimensions)
         if index == i:
             colour = "Red"
-            #updated_rects.append(dimensions)
 
 
         # Cretae rect & draw to screen
@@ -173,7 +170,6 @@ def finishedVisual(arr, i, green_bars):
         tone.play()
     
 
-    #pygame.display.update(updated_rects)
     pygame.display.flip()
     clock.tick(framerate)
 
@@ -224,7 +220,7 @@ while running:
 
         if is_sorted:
             # Show Complete Algorithm
-            green_bars = [False] * array_size
+            green_bars = [False] * array_size       # Create an array with false as no bars have been checked.
             for i in range(len(a)):
                 if playBtnClick():
                     break
