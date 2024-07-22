@@ -5,7 +5,6 @@ import math
 #TODO : Clean algorithms code (binary search & exponential binarysearch)
 #TODO : Fibonacci Search
 #TODO : Bogo Search
-#TODO : Bubble Sort
 #TODO : Insertion Sort
 #TODO : Merge Sort
 #TODO : Heap Sort
