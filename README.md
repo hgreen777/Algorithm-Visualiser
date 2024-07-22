@@ -16,6 +16,10 @@ BEWARE!! DO NOT HAVE VOLUME SET TO A HIGH LEVEL!!!
 - If no algorithm is in process, it will be reset (ie re-shuffled and sort started again from beginning)
 - Ensure if algorithm requires a sorted algorithm, this option is set to "True" else this could break the program.
 
+Algorithms that require a sorted array:
+- Binary Search
+- Jump Search 
+
 # 👨‍💻 Algorithms Included
 - Linear Search
 - Binary Search

@@ -1,4 +1,5 @@
 import random
+import math
 
 def bubbleSort(arr, update_visual_callback, quit_call):
     n = len(arr) 
@@ -31,8 +32,8 @@ def linearSearch(arr, update_visual_callback, quit_call):
     print(f"looking for: {searchValue}")
     for i in range(len(arr)):
         if quit_call():
-                print("Stopping Algorithm")
-                return False
+            print("Stopping Algorithm")
+            return False
         
         array_accesses += 1
         comparisons += 1
@@ -43,7 +44,7 @@ def linearSearch(arr, update_visual_callback, quit_call):
             return False
     
     print("Error: Element not in array")
-    return 
+    return False
 
 def binarySearch(arr, update_visual_callback, quit_call):
     comparisons = 0
@@ -71,6 +72,58 @@ def binarySearch(arr, update_visual_callback, quit_call):
             print("Element Found")
             return False
         
+def jumpSearch(arr, update_visual_callback, quit_call):
+    # Requires Sorted Array
+    comparisons = 0
+    array_accesses = 0
+    n = len(arr)
+    search_value = random.randint(1,n)
 
+    print(f"looking for: {search_value}")
+
+    i = 0 
+    b = int(math.floor(math.sqrt(n)))
+
+    while arr[min(b, n) - 1] < search_value:
+        if quit_call():
+            print("Stopping Algorithm")
+            return False
+        array_accesses += 1
+        comparisons += 1
+        
+        i = b
+        b = b + int(math.floor(math.sqrt(n)))
+
+        if i >= n:
+            print("Error: Element not found in the array")
+            return False
+        
+        update_visual_callback(arr,[i],[comparisons,array_accesses])
+    
+    comparisons += 1
+    array_accesses += 1
+
+    while arr[i] < search_value:
+        if quit_call():
+            print("Stopping Algorithm")
+            return False 
+        array_accesses += 1
+        comparisons += 1
+        
+        i += 1
+        if i == min(b,n):
+            print("Error: Element not found in the array.")
+            return False
+        
+        update_visual_callback(arr,[i],[comparisons,array_accesses])
+    
+    comparisons += 2
+    array_accesses += 2
+    if arr[i] == search_value:
+        print("Element Found ")
+        return False
+
+    print("Error: Element not found in the array.")
+    return False
 
 
