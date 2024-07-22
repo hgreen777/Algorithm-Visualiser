@@ -6,10 +6,6 @@ import random
 import math
 import numpy as np
 
-"""TODO"""
-# TODO : Add algorithms.
-# TODO : Clean Code
-
 """User Defined Variables - Customise to personal liking"""
 framerate = 50                    # Advise < 1000 (unlikely pc will be quick enough). Try to match the framerate with the actual to make it more efficient like with games, capping the fps makes it smoother.
 array_size = 2500                   # Cannot be bigger then the useable X (advised size depends on sorting/searching algorithm used).

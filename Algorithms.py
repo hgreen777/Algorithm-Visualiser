@@ -1,6 +1,17 @@
 import random
 import math
 
+"""TODO"""
+#TODO : Clean algorithms code (binary search & exponential binarysearch)
+#TODO : Fibonacci Search
+#TODO : Bogo Search
+#TODO : Bubble Sort
+#TODO : Insertion Sort
+#TODO : Merge Sort
+#TODO : Heap Sort
+#TODO : Counting Sort
+#TODO : Bogo Sort
+
 def bubbleSort(arr, update_visual_callback, quit_call):
     n = len(arr) 
     comparisons = 0
@@ -156,36 +167,6 @@ def bogoSearch(arr, update_visual_callback, quit_call):
         if arr[x] == search_value:
             print("Element Found")
             return False
-        
-
-def binarySearchh(arr, l,r,x, metrics, update_visual_callback, quit_call):
-    if quit_call():
-        print("Stopping Algorithm")
-        return False 
-    
-    L = l
-    R = r
-
-    while L <= R:
-        if quit_call():
-            print("Stopping Algorithm")
-            return False
-        
-        middle = int((L+R) / 2)
-        metrics[0] += 1
-        metrics[1] += 2
-
-        update_visual_callback(arr, [middle],metrics)
-        if arr[middle] > x:
-            R = middle - 1
-        elif arr[middle] < x:
-            L = middle + 1
-        else:
-            print("Element Found")
-            return False
-    
-    print("Error Element not found")
-    return False
 
 def exponentialSearch(arr, update_visual_callback, quit_call):
     metrics = [0,0]
