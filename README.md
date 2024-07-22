@@ -2,7 +2,7 @@
 Visualise Sort &amp; Search Algorithms. [Python][Pygame]
 
 BEWARE!! DO NOT HAVE VOLUME SET TO A HIGH LEVEL!!!
-    THE SOUND USED IS NOT PLEASENT SO TURN VOLUME DOWN!!!
+THE SOUND USED IS NOT PLEASENT SO TURN VOLUME DOWN!!!
 
 # 🧾 Features
 - Select an algorithm
@@ -19,6 +19,7 @@ BEWARE!! DO NOT HAVE VOLUME SET TO A HIGH LEVEL!!!
 Algorithms that require a sorted array:
 - Binary Search
 - Jump Search 
+- Exponential Binary Search
 
 # 👨‍💻 Algorithms Included
 - Linear Search
