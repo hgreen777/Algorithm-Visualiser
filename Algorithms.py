@@ -46,13 +46,19 @@ def linearSearch(arr, update_visual_callback, quit_call):
     print("Error: Element not in array")
     return False
 
-def binarySearch(arr, update_visual_callback, quit_call):
+def binarySearch(arr, update_visual_callback, quit_call, l=0,r=0,x=0,metrics=[0,0],default=False):
     comparisons = 0
     array_accesses = 0
     search_value = random.randint(1, len(arr))
-    print(f"Lookign for: {search_value}")
-    L = 0
-    R = len(arr) - 1
+    L = l
+    if default:
+        R = r
+        search_value = x 
+        comparisons = metrics[0]
+        array_accesses = metrics[1]
+    else:
+        R = len(arr) - 1
+        print(f"Lookign for: {search_value}")
 
     while L <= R:
         if quit_call():
@@ -119,6 +125,7 @@ def jumpSearch(arr, update_visual_callback, quit_call):
     comparisons += 2
     array_accesses += 2
     if arr[i] == search_value:
+        update_visual_callback(arr,[i],[comparisons,array_accesses])
         print("Element Found ")
         return False
 
@@ -149,4 +156,63 @@ def bogoSearch(arr, update_visual_callback, quit_call):
         if arr[x] == search_value:
             print("Element Found")
             return False
+        
+
+def binarySearchh(arr, l,r,x, metrics, update_visual_callback, quit_call):
+    if quit_call():
+        print("Stopping Algorithm")
+        return False 
+    
+    L = l
+    R = r
+
+    while L <= R:
+        if quit_call():
+            print("Stopping Algorithm")
+            return False
+        
+        middle = int((L+R) / 2)
+        metrics[0] += 1
+        metrics[1] += 2
+
+        update_visual_callback(arr, [middle],metrics)
+        if arr[middle] > x:
+            R = middle - 1
+        elif arr[middle] < x:
+            L = middle + 1
+        else:
+            print("Element Found")
+            return False
+    
+    print("Error Element not found")
+    return False
+
+def exponentialSearch(arr, update_visual_callback, quit_call):
+    metrics = [0,0]
+    n = len(arr)
+    x = random.randint(1,len(arr))
+    print(f"Looking for: {x}")
+
+    if arr[0] == x:
+        metrics = [metric + 1 for metric in metrics] 
+        update_visual_callback(arr,[0],metrics)
+        print("Element Found")
+        return False
+    
+    
+    i = 1
+
+    while i < n and arr[i] <= x:
+        if quit_call():
+            print("Stopping Algorithm")
+            return False 
+            
+        i = i * 2
+
+        metrics = [metric + 1 for metric in metrics]
+        update_visual_callback(arr,[i],metrics)
+    
+    #return binarySearchh(arr, i // 2, min(i, n-1),x, metrics, update_visual_callback, quit_call)
+    return binarySearch(arr, update_visual_callback, quit_call,i // 2,min(i,n-1),x,metrics,True)
+
         

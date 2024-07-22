@@ -24,7 +24,7 @@ Algorithms that require a sorted array:
 - Linear Search
 - Binary Search
 - Jump Search
-- Exponential Search
+- Exponential Binary Search
 - Fibonacci Search
 - Bogo Search
 - Bubble Sort
