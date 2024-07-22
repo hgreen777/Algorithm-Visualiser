@@ -10,6 +10,9 @@ def bubbleSort(arr, update_visual_callback, quit_call):
             if quit_call():
                 print("Stopping Algorithm")
                 return False
+            
+            #if i == 5:
+            #    return True
 
             comparisons += 1
             array_accesses += 2

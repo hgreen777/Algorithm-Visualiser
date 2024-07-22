@@ -11,12 +11,13 @@ import numpy as np
 # TODO : Clean Code
 
 """User Defined Variables - Customise to personal liking"""
-framerate = 750                     # Advise < 1000 (unlikely pc will be quick enough). Try to match the framerate with the actual to make it more efficient like with games, capping the fps makes it smoother.
-array_size = 100                    # Cannot be bigger then the useable X (advised size depends on sorting/searching algorithm used).
+framerate = 50                     # Advise < 1000 (unlikely pc will be quick enough). Try to match the framerate with the actual to make it more efficient like with games, capping the fps makes it smoother.
+array_size = 25                    # Cannot be bigger then the useable X (advised size depends on sorting/searching algorithm used).
 current_algorithm = bubbleSort      # Pick the current running algo.
 launch_with_sorted_array = True     # When the program launches if this is true the array will be shown in its final state, sorted. (If false, array is reshuffled anyway before starting algo (purely aesthetic)).
 sorted_array_for_algo = False       # Does the algorithm need a sorted array to run.
 disable_sound = False               # Enable/Disable Sound.
+
 
 """Constants initialisations"""
 screenX,useableX = 2500, 2500
@@ -29,12 +30,14 @@ height_interval = useableY / array_size
 width = useableX / array_size
 freq_range = 400
 
+# Sound Calculations 
 duration_ms = 100
 sample_rate = 44100  # Hertz
 n_samples = int(sample_rate * duration_ms / 1000)
 t = np.linspace(0, duration_ms / 1000, n_samples, False)
 tone_cache = {}
 
+# Button Location
 play_btn_center = (30,30)
 play_btn_radius = 25
 txt_location = (play_btn_center[0] + play_btn_radius + 20, play_btn_center[1] - 15)
@@ -53,7 +56,7 @@ clock = pygame.time.Clock()
 def generate_tone(frequency):
 
     # Generate a sine wave at the given frequency & convert to 16-bit data
-    waveform = (32767 * np.sin(2 * np.pi * frequency * t)).astype(np.int16)
+    waveform = (32767 * np.sin(2 * np.pi * frequency * t)).astype(np.int16)     # A sin(2pi ft + phase)     - Phase = 0 
 
     sound = pygame.mixer.Sound(waveform)        # Create sound
 
@@ -64,6 +67,7 @@ def value_to_frequency(value, min_value=1, max_value=array_size, min_freq=0, max
     # Map value to frequency in the given range
     return min_freq + (max_freq - min_freq) * ((value - min_value) / (max_value - min_value))
 
+# Add frequency to cache to make it more efficient (so tone is only generated once and then it is just accessed and played)
 def get_cached_tone(frequency):
     if frequency not in tone_cache:
         tone_cache[frequency] = generate_tone(frequency)
@@ -136,31 +140,40 @@ def updateVisual(arr, selected, metrics):
     clock.tick(framerate)
 
 # vv Purely Visual (doesn't actually check if sorted, jus trust bro)
-def finishedVisual(arr, current, flipped):
-    total = len(flipped)
+# Checks if the array has been sorted.
+def finishedVisual(arr, i, green_bars):
+    #updated_rects = []
     for index, item in enumerate(arr):
         # Calculatre variable dimensions
         height = item * height_interval
         left = index * width
         top = screenY - height
 
+        dimensions = pygame.Rect(left, top, width, height)
+
         colour = "White"
-        if index <= total:
+        if green_bars[index]:
             colour = "Green"
-        if index == current:
+        if item == (i+1) and index == i:
+            colour = "Green"
+            green_bars[index] = True
+            #updated_rects.append(dimensions)
+        if index == i:
             colour = "Red"
+            #updated_rects.append(dimensions)
 
 
         # Cretae rect & draw to screen
-        dimensions = pygame.Rect(left, top, width, height)
         pygame.draw.rect(screen, colour, dimensions)
 
+
     if not disable_sound:
-        frequency = value_to_frequency(current)
+        frequency = value_to_frequency(arr[index])
         tone = generate_tone(frequency)  # 100 ms duration
         tone.play()
     
 
+    #pygame.display.update(updated_rects)
     pygame.display.flip()
     clock.tick(framerate)
 
@@ -210,13 +223,12 @@ while running:
         is_sorted = current_algorithm(a, updateVisual, playBtnClick)
 
         if is_sorted:
-            allEll = []
             # Show Complete Algorithm
+            green_bars = [False] * array_size
             for i in range(len(a)):
                 if playBtnClick():
                     break
-                finishedVisual(a, i, allEll)
-                allEll.append(i)
+                finishedVisual(a, i, green_bars)
     elif isPlayBTNclicked and sorting:
         # If the button is clicked and sorting is occuring, stop it. 
         sorting = False
