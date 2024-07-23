@@ -245,6 +245,52 @@ def insertionSort(arr, update_visual_callback, quit_call):
 
 # TODO
 def mergeSort(arr, update_visual_callback, quit_call):
+    metrics = [0,0]
+    n = len(arr)
+
+    def copy_array(a,i_begin,i_end,b):
+        for k in range(i_begin,i_end):
+            b.append(a[k])
+        
+        return b    
+
+    def top_down_merge(b, i_begin, i_middle, i_end,a):
+        i = i_begin
+        j = i_middle
+
+        for k in range(i_begin, i_end):
+            update_visual_callback(b,[k],metrics)
+            if i < i_middle and (j >= i_end or a[i] <= a[j]):
+                b[k] = a[i]
+                i += 1
+            else:
+                b[k] = a[j]
+                j += 1
+        
+        return b
+
+        update_visual_callback(a,[k],metrics)
+
+    def top_down_split_merge(b, i_begin, i_end, a):
+        if (i_end - i_begin) <= 1:
+            return
+        
+        i_middle = (i_begin + i_end) // 2
+
+        update_visual_callback(arr,b, metrics)
+
+        top_down_split_merge(a,i_begin,i_middle,b)
+        top_down_split_merge(a,i_middle,i_end,b)
+
+        return top_down_merge(b,i_begin, i_middle, i_end, a)
+
+        
+
+    def top_down_merge_sort(a,b,n):
+        b = copy_array(a,0,n,b)
+        return top_down_split_merge(a,0,n,b)
+    
+    update_visual_callback(top_down_merge_sort(arr,[],n),[0],metrics)
     return False
 
 # TODO
