@@ -3,36 +3,13 @@ import math
 
 """TODO"""
 #TODO : Clean algorithms code (binary search & exponential binarysearch)
-#TODO : Bogo Search
 #TODO : Insertion Sort
 #TODO : Merge Sort
 #TODO : Heap Sort
 #TODO : Counting Sort
 #TODO : Bogo Sort
 
-def bubbleSort(arr, update_visual_callback, quit_call):
-    n = len(arr) 
-    comparisons = 0
-    array_accesses = 0
-    for i in range(n):
-        swapped = False
-        for j in range (0, n-i-1):
-            if quit_call():
-                print("Stopping Algorithm")
-                return False
-
-            comparisons += 1
-            array_accesses += 2
-            if arr[j] > arr[j+1]:
-                arr[j], arr[j+1] = arr[j+1],arr[j]
-                swapped = True
-                array_accesses += 4
-
-                update_visual_callback(arr,[j,j+1],[comparisons,array_accesses])
-        if swapped == False:
-            print("Algorithm Completed")
-            return True
-
+"""SEARCHING ALGORITHMS"""
 def linearSearch(arr, update_visual_callback, quit_call):
     comparisons = 0
     array_accesses = 0
@@ -141,7 +118,6 @@ def jumpSearch(arr, update_visual_callback, quit_call):
     print("Error: Element not found in the array.")
     return False
 
-
 def bogoSearch(arr, update_visual_callback, quit_call):
     comparisons = 0
     array_accesses = 0
@@ -238,4 +214,47 @@ def fibonacciSearch(arr, update_visual_callback, quit_call):
 
     print("Error")
     return False
-        
+
+"""SORTING ALGORITHMS"""      
+def bubbleSort(arr, update_visual_callback, quit_call):
+    n = len(arr) 
+    comparisons = 0
+    array_accesses = 0
+    for i in range(n):
+        swapped = False
+        for j in range (0, n-i-1):
+            if quit_call():
+                print("Stopping Algorithm")
+                return False
+
+            comparisons += 1
+            array_accesses += 2
+            if arr[j] > arr[j+1]:
+                arr[j], arr[j+1] = arr[j+1],arr[j]
+                swapped = True
+                array_accesses += 4
+
+                update_visual_callback(arr,[j,j+1],[comparisons,array_accesses])
+        if swapped == False:
+            print("Algorithm Completed")
+            return True
+
+# TODO
+def insertionSort(arr, update_visual_callback, quit_call):
+    return False
+
+# TODO
+def mergeSort(arr, update_visual_callback, quit_call):
+    return False
+
+# TODO
+def heapSort(arr, update_visual_callback, quit_call):
+    return False
+
+# TODO
+def countingSort(arr, update_visual_callback, quit_call):
+    return False
+
+# TODO
+def bogoSort(arr, update_visual_callback, quit_call):
+    return False
