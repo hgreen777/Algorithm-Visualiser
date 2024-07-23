@@ -259,7 +259,7 @@ def mergeSort(arr, update_visual_callback, quit_call):
         j = i_middle
 
         for k in range(i_begin, i_end):
-            update_visual_callback(b,[k],metrics)
+            update_visual_callback(b,[i_begin,i_end,k,i,j],metrics)
             if i < i_middle and (j >= i_end or a[i] <= a[j]):
                 b[k] = a[i]
                 i += 1
@@ -269,15 +269,13 @@ def mergeSort(arr, update_visual_callback, quit_call):
         
         return b
 
-        update_visual_callback(a,[k],metrics)
-
     def top_down_split_merge(b, i_begin, i_end, a):
         if (i_end - i_begin) <= 1:
             return
         
         i_middle = (i_begin + i_end) // 2
 
-        update_visual_callback(arr,b, metrics)
+        update_visual_callback(arr,[i_begin,i_end], metrics)
 
         top_down_split_merge(a,i_begin,i_middle,b)
         top_down_split_merge(a,i_middle,i_end,b)
@@ -290,8 +288,8 @@ def mergeSort(arr, update_visual_callback, quit_call):
         b = copy_array(a,0,n,b)
         return top_down_split_merge(a,0,n,b)
     
-    update_visual_callback(top_down_merge_sort(arr,[],n),[0],metrics)
-    return False
+    update_visual_callback(top_down_merge_sort(arr,[],n),[n-1],metrics)
+    return True
 
 # TODO
 def heapSort(arr, update_visual_callback, quit_call):
