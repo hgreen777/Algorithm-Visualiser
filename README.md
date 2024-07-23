@@ -20,6 +20,7 @@ Algorithms that require a sorted array:
 - Binary Search
 - Jump Search 
 - Exponential Binary Search
+- Fibonacci search
 
 # 👨‍💻 Algorithms Included
 - Linear Search

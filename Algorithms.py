@@ -3,7 +3,6 @@ import math
 
 """TODO"""
 #TODO : Clean algorithms code (binary search & exponential binarysearch)
-#TODO : Fibonacci Search
 #TODO : Bogo Search
 #TODO : Insertion Sort
 #TODO : Merge Sort
@@ -195,4 +194,48 @@ def exponentialSearch(arr, update_visual_callback, quit_call):
     #return binarySearchh(arr, i // 2, min(i, n-1),x, metrics, update_visual_callback, quit_call)
     return binarySearch(arr, update_visual_callback, quit_call,i // 2,min(i,n-1),x,metrics,True)
 
+def fibonacciSearch(arr, update_visual_callback, quit_call):
+    metrics = [0,0]
+    n = len(arr)
+    x = random.randint(1,n)
+    print(f"looking for: {x}")
+
+    # Calculating valid fibonacci sequence for the array.
+    k = 3
+    F = [0,1,1]
+    while F[k - 1] < n:
+        F.append(F[k-1] + F[k-2])
+        k += 1
+
+    # Check valid array is passed
+    if k <= 1:
+        print("Error: Array is not of valid length")
+        return False
+    
+    found = False
+    offset = -1 
+
+    # Search until elements is found or program crashes due to infinite loop.
+    while not found:
+        # For exiting algo early.
+        if quit_call():
+            print("Stopping Algorithm")
+            return False
+        
+        # Checking either the 
+        i = min(offset + F[k - 2], n - 1)
+
+        update_visual_callback(arr,[i], metrics)
+        if x == arr[i]: # Element is found 
+            found = True
+            print(f"Element Found at {arr[i]}")
+            return False
+        if x > arr[i]: # If the element is not in that fibonacci gap (but it is to the right)
+            k = k -1 
+            offset = i
+        if x < arr[i]:
+            k = k - 2
+
+    print("Error")
+    return False
         
