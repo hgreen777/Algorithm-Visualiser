@@ -242,7 +242,7 @@ def bubbleSort(arr, update_visual_callback, quit_call):
 def insertionSort(arr, update_visual_callback, quit_call):
     return False
 
-# TODO
+# TODO: Fix Crashes & Factor Code to make more accessible & readable.
 def mergeSort(arr, update_visual_callback, quit_call):
     metrics = [0,0]
     n = len(arr)
@@ -302,6 +302,7 @@ def bogoSort(arr, update_visual_callback, quit_call):
     n = len(arr)
     metrics = [0,0]
 
+    """ Randomly shuffles the array by changing the position of every element. """
     def shuffleArray(n,arr):
         n -= 1
 
@@ -312,11 +313,12 @@ def bogoSort(arr, update_visual_callback, quit_call):
         metrics[1] += (n + 1) * 4
         
 
-        
+    """ Checks if the array is sorted. """
     def array_sorted(arr):
         j = 1
         sorted = True
 
+        # Linearly traverses array to ensure it is ordered.
         for i in range(0, n):
             metrics[1] += 1
             if arr[i] != j:
@@ -326,12 +328,17 @@ def bogoSort(arr, update_visual_callback, quit_call):
         
         return True
     
+    # While the array is not sorted, shuffle the array (and update visual).
     while not array_sorted(arr):
-        if quit_call():
+        if quit_call(): # Prevents crashing and allows user to stop processing early.
             print("Stopping Algorithm")
             return False
+        
         shuffleArray(n,arr)
+        
+        # Updates comparisons and produces a visual update on the screen.
         metrics[0] += 1
         update_visual_callback(arr,[0],metrics)
     
+    # Array has been sorted.
     return True
