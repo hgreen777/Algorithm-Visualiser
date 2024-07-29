@@ -259,7 +259,7 @@ def mergeSort(arr, update_visual_callback, quit_call):
         j = i_middle
 
         for k in range(i_begin, i_end):
-            update_visual_callback(b,[i_begin,i_end,k,i,j],metrics)
+            update_visual_callback(arr,[k,i,j],metrics)
             if i < i_middle and (j >= i_end or a[i] <= a[j]):
                 b[k] = a[i]
                 i += 1

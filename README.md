@@ -15,6 +15,7 @@ THE SOUND USED IS NOT PLEASENT SO TURN VOLUME DOWN!!!
 - The green button will stop the algorithm if an algorithm is in progress. 
 - If no algorithm is in process, it will be reset (ie re-shuffled and sort started again from beginning)
 - Ensure if algorithm requires a sorted algorithm, this option is set to "True" else this could break the program.
+- NOTE: DO NOT tab out when doing merge sort - program liable to crashing.
 
 Algorithms that require a sorted array:
 - Binary Search
@@ -38,3 +39,4 @@ Algorithms that require a sorted array:
 
 # Future
 - Boost FPS
+- Stop Crashing issue on merge sort
