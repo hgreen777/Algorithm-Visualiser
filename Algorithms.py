@@ -7,7 +7,6 @@ import math
 #TODO : Merge Sort
 #TODO : Heap Sort
 #TODO : Counting Sort
-#TODO : Bogo Sort
 
 """SEARCHING ALGORITHMS"""
 def linearSearch(arr, update_visual_callback, quit_call):
@@ -299,6 +298,40 @@ def heapSort(arr, update_visual_callback, quit_call):
 def countingSort(arr, update_visual_callback, quit_call):
     return False
 
-# TODO
 def bogoSort(arr, update_visual_callback, quit_call):
-    return False
+    n = len(arr)
+    metrics = [0,0]
+
+    def shuffleArray(n,arr):
+        n -= 1
+
+        for i in range(0, n):
+            j = random.randint(0, n)
+            arr[i], arr[j] = arr[j], arr[i]
+        
+        metrics[1] += (n + 1) * 4
+        
+
+        
+    def array_sorted(arr):
+        j = 1
+        sorted = True
+
+        for i in range(0, n):
+            metrics[1] += 1
+            if arr[i] != j:
+                return False
+            
+            j += 1
+        
+        return True
+    
+    while not array_sorted(arr):
+        if quit_call():
+            print("Stopping Algorithm")
+            return False
+        shuffleArray(n,arr)
+        metrics[0] += 1
+        update_visual_callback(arr,[0],metrics)
+    
+    return True

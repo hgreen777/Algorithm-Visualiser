@@ -40,3 +40,4 @@ Algorithms that require a sorted array:
 # Future
 - Boost FPS
 - Stop Crashing issue on merge sort
+- Clean fibonacci code, clean merge sort code & add quit_call functionality (quitcall may be causing the crashes)
