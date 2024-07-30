@@ -242,7 +242,11 @@ def bubbleSort(arr, update_visual_callback, quit_call):
 def insertionSort(arr, update_visual_callback, quit_call):
     return False
 
-# TODO: Fix Crashes & Factor Code to make more accessible & readable.
+
+class exit_from_nested_function(Exception):
+    pass
+
+# TODO: Factor Code to make more accessible & readable. & fix, visual update does not update as much as it should (or the array its displaying is not correct)
 def mergeSort(arr, update_visual_callback, quit_call):
     metrics = [0,0]
     n = len(arr)
@@ -258,6 +262,9 @@ def mergeSort(arr, update_visual_callback, quit_call):
         j = i_middle
 
         for k in range(i_begin, i_end):
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                raise exit_from_nested_function
             update_visual_callback(arr,[k,i,j],metrics)
             if i < i_middle and (j >= i_end or a[i] <= a[j]):
                 b[k] = a[i]
@@ -274,6 +281,10 @@ def mergeSort(arr, update_visual_callback, quit_call):
         
         i_middle = (i_begin + i_end) // 2
 
+        if quit_call(): # Prevents crashing and allows user to stop processing early.
+            print("Stopping Algorithm")
+            raise exit_from_nested_function
+
         update_visual_callback(arr,[i_begin,i_end], metrics)
 
         top_down_split_merge(a,i_begin,i_middle,b)
@@ -286,9 +297,12 @@ def mergeSort(arr, update_visual_callback, quit_call):
     def top_down_merge_sort(a,b,n):
         b = copy_array(a,0,n,b)
         return top_down_split_merge(a,0,n,b)
-    
-    update_visual_callback(top_down_merge_sort(arr,[],n),[n-1],metrics)
-    return True
+
+    try:
+        update_visual_callback(top_down_merge_sort(arr,[],n),[n-1],metrics)
+        return True
+    except exit_from_nested_function:
+        return False
 
 # TODO
 def heapSort(arr, update_visual_callback, quit_call):
