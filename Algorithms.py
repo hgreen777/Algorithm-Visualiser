@@ -4,7 +4,6 @@ import math
 """TODO"""
 #TODO : Clean algorithms code (binary search & exponential binarysearch)
 #TODO : Insertion Sort
-#TODO : Merge Sort - comments
 #TODO : Heap Sort
 #TODO : Counting Sort
 #TODO : Quick Sort 
