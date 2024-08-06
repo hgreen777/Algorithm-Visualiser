@@ -243,65 +243,86 @@ def bubbleSort(arr, update_visual_callback, quit_call):
 def insertionSort(arr, update_visual_callback, quit_call):
     return False
 
-# TODO: make more readable [comments].
 def mergeSort(array, update_visual, quit_call):
     metrics = [0,0]
 
+    # Responsible for merging 2 subarrays togethor.
     def merge(arr, left, mid, right):
-        n1 = mid - left + 1
-        n2 = right - mid
+        n1 = mid - left + 1         # Size of L array
+        n2 = right - mid            # Size of R array
 
-        L = arr[left:mid + 1]
-        R = arr[mid + 1:right + 1]
+        L = arr[left:mid + 1]       # Creates a left array
+        R = arr[mid + 1:right + 1]  # Creates a right array
 
-        i = j = 0
-        k = left
+        i = j = 0   # creates 2 left pointers for the start of the L & R array.
+        k = left    # Creates a pointer to index of the location for the enxt sorted elements.
 
         metrics[1] += 2
 
+        # While the pointers have not reached the end of each of the arrays.
         while i < n1 and j < n2:
             if quit_call(): # Prevents crashing and allows user to stop processing early.
                 print("Stopping Algorithm")
                 return False
-
             metrics[0] += 1
             metrics[1] += 4
+
+
+            # If the current element of the left subarray is smaller then the current pointed to right array element, add the left element to that position in the array and move the left pointer by 1.
             if L[i] <= R[j]:
                 arr[k] = L[i]
+
                 update_visual(arr, [k, left + i], metrics)
+
                 i += 1
             else:
+            # Else set the current element to be where the right pointer is and move the right pointer along.
                 arr[k] = R[j]
+
                 update_visual(arr, [k, mid + 1 + j], metrics)
+
                 j += 1
+            
+            # Move onto the next element in the main array.
             k += 1
 
+        # For the rest of the left array, set the next element to the next element in the array (this means all the right array is smaller then the rest of the left array).
         while i < n1:
             if quit_call(): # Prevents crashing and allows user to stop processing early.
                 print("Stopping Algorithm")
                 return False
             metrics[1] += 2
+            
             arr[k] = L[i]
+
             update_visual(arr, [k, left + i], metrics)
+
             i += 1
             k += 1
 
+        # For the rest of the right array, set the next element to the next element in the array (this means all the left array is smaller then the rest of the right array).
         while j < n2:
             if quit_call(): # Prevents crashing and allows user to stop processing early.
                 print("Stopping Algorithm")
                 return False
             metrics[1] += 2
+
             arr[k] = R[j]
+
             update_visual(arr, [k, mid + 1 + j], metrics)
+
             j += 1
             k += 1
         
         return True
 
+    # Responsible for splitting the array down into sub arrays & then merging the subarrays togethor but in a sorted fashion.
     def merge_sort_recursive(arr, left, right):
+        # Until the whole of the array has been split into it's smallest array [ie 1]
         if left < right:
-            mid = (left + right) // 2
+            mid = (left + right) // 2   # Find the middle to create 2 subarrays left,middle & middle,right
 
+            # Recurse until len(arr) = 1
             if not merge_sort_recursive(arr, left, mid):
                 return False
             if not merge_sort_recursive(arr, mid + 1, right):
@@ -314,10 +335,10 @@ def mergeSort(array, update_visual, quit_call):
         return True
 
     update_visual(array, list(range(len(array))), metrics)
+    # Start the merge sort on the whole array.
     if not merge_sort_recursive(array, 0, len(array) - 1):
         return False
     return True
-
 
 # TODO
 def heapSort(arr, update_visual_callback, quit_call):
@@ -374,4 +395,4 @@ def bogoSort(arr, update_visual_callback, quit_call):
 
 # TODO 
 def quickSort(arr, update_visual_callback, quit_call):
-    return False
+    return False 
