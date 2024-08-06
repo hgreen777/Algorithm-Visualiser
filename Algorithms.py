@@ -2,7 +2,6 @@ import random
 import math
 
 """TODO"""
-#TODO : Clean algorithms code (exponential binarysearch)
 #TODO : Insertion Sort
 #TODO : Heap Sort
 #TODO : Counting Sort
@@ -155,11 +154,13 @@ def bogoSearch(arr, update_visual_callback, quit_call):
             return False
 
 def exponentialSearch(arr, update_visual_callback, quit_call):
+    # Initialize variables.
     metrics = [0,0]
     n = len(arr)
     x = random.randint(1,len(arr))
     print(f"Looking for: {x}")
 
+    # Check if the first element is the search value.
     if arr[0] == x:
         metrics = [metric + 1 for metric in metrics] 
         update_visual_callback(arr,[0],metrics)
@@ -169,8 +170,9 @@ def exponentialSearch(arr, update_visual_callback, quit_call):
     
     i = 1
 
+    # While the current indexed element is smaller then the search_value and the end of the arr has not been found, find the next exponential number.
     while i < n and arr[i] <= x:
-        if quit_call():
+        if quit_call(): # Prevents crashing and allows user to stop processing early.
             print("Stopping Algorithm")
             return False 
             
@@ -179,7 +181,8 @@ def exponentialSearch(arr, update_visual_callback, quit_call):
         metrics = [metric + 1 for metric in metrics]
         update_visual_callback(arr,[i],metrics)
     
-    #return binarySearchh(arr, i // 2, min(i, n-1),x, metrics, update_visual_callback, quit_call)
+    # Call a binary search with the smaller range of bounds given by the exponential search.
+    # Using the found exponentials number, set the lower bound the be 1/2 * e, and upper bound being the exponential number or the end of the arr. 
     return binarySearch(arr, update_visual_callback, quit_call,i // 2,min(i,n-1),x,metrics,True)
 
 def fibonacciSearch(arr, update_visual_callback, quit_call):
