@@ -1,7 +1,7 @@
 #Imports 
 import time
 import pygame
-from Algorithms import linearSearch, binarySearch, jumpSearch, exponentialSearch, fibonacciSearch, bogoSearch, bubbleSort, insertionSort, mergeSort, heapSort, countingSort, bogoSort
+from Algorithms import linearSearch, binarySearch, jumpSearch, exponentialSearch, fibonacciSearch, bogoSearch, bubbleSort, insertionSort, mergeSort, heapSort, countingSort, bogoSort, quickSort
 import random
 import math
 import numpy as np
