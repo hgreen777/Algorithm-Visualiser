@@ -2,7 +2,7 @@ import random
 import math
 
 """TODO"""
-#TODO : Clean algorithms code (binary search & exponential binarysearch)
+#TODO : Clean algorithms code (exponential binarysearch)
 #TODO : Insertion Sort
 #TODO : Heap Sort
 #TODO : Counting Sort
@@ -32,36 +32,49 @@ def linearSearch(arr, update_visual_callback, quit_call):
     return False
 
 def binarySearch(arr, update_visual_callback, quit_call, l=0,r=0,x=0,metrics=[0,0],default=False):
-    comparisons = 0
-    array_accesses = 0
-    search_value = random.randint(1, len(arr))
-    L = l
+    # Initialise variables 
+    L = l   # L will be 0 or a value passed through by exponential search so should be set to l regardless of calling function. 
+
     if default:
+        # Due to it coming from a exponential search, smaller subsection used to search through so R needs to be set and the search_value updated with the correct value.
         R = r
         search_value = x 
-        comparisons = metrics[0]
-        array_accesses = metrics[1]
     else:
+    # Not coming from exponential so a search value needs to be generated.
+    # Right pointer to the end of the arr as will be searching through whole array
         R = len(arr) - 1
-        print(f"Lookign for: {search_value}")
+        search_value = random.randint(1, len(arr))
+        print(f"Looking for: {search_value}")
 
+    # While there are still elements between the pointers (ie the element could still be in the list)
     while L <= R:
-        if quit_call():
+
+        if quit_call(): # Prevents crashing and allows user to stop processing early.
             print("Stopping Algorithm")
             return False
         
+        # Sets middle pointer
         middle = int((L+R) / 2)
-        comparisons += 1
-        array_accesses += 2
 
-        update_visual_callback(arr, [middle],[comparisons,array_accesses])
+        # Updates metrics & visual to show where the middle pointer is.
+        metrics[0] += 1
+        metrics[1] += 2
+
+        update_visual_callback(arr, [middle],metrics)
+
+        # Decides which sub-array should be searched next if the element is not at middle and sets the pointers accordingly.
         if arr[middle] > search_value:
             R = middle - 1
         elif arr[middle] < search_value:
             L = middle + 1
         else:
+            # Return as element has been found (finished visual does not need to be ran so return False)
             print("Element Found")
             return False
+    
+    # Error has occured so return
+    print("Error")
+    return False
         
 def jumpSearch(arr, update_visual_callback, quit_call):
     # Requires Sorted Array
