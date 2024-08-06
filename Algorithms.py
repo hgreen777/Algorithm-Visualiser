@@ -4,9 +4,10 @@ import math
 """TODO"""
 #TODO : Clean algorithms code (binary search & exponential binarysearch)
 #TODO : Insertion Sort
-#TODO : Merge Sort
+#TODO : Merge Sort - comments
 #TODO : Heap Sort
 #TODO : Counting Sort
+#TODO : Quick Sort 
 
 """SEARCHING ALGORITHMS"""
 def linearSearch(arr, update_visual_callback, quit_call):
@@ -242,67 +243,81 @@ def bubbleSort(arr, update_visual_callback, quit_call):
 def insertionSort(arr, update_visual_callback, quit_call):
     return False
 
-
-class exit_from_nested_function(Exception):
-    pass
-
-# TODO: Factor Code to make more accessible & readable. & fix, visual update does not update as much as it should (or the array its displaying is not correct)
-def mergeSort(arr, update_visual_callback, quit_call):
+# TODO: make more readable [comments].
+def mergeSort(array, update_visual, quit_call):
     metrics = [0,0]
-    n = len(arr)
 
-    def copy_array(a,i_begin,i_end,b):
-        for k in range(i_begin,i_end):
-            b.append(a[k])
-        
-        return b    
+    def merge(arr, left, mid, right):
+        n1 = mid - left + 1
+        n2 = right - mid
 
-    def top_down_merge(b, i_begin, i_middle, i_end,a):
-        i = i_begin
-        j = i_middle
+        L = arr[left:mid + 1]
+        R = arr[mid + 1:right + 1]
 
-        for k in range(i_begin, i_end):
+        i = j = 0
+        k = left
+
+        metrics[1] += 2
+
+        while i < n1 and j < n2:
             if quit_call(): # Prevents crashing and allows user to stop processing early.
                 print("Stopping Algorithm")
-                raise exit_from_nested_function
-            update_visual_callback(arr,[k,i,j],metrics)
-            if i < i_middle and (j >= i_end or a[i] <= a[j]):
-                b[k] = a[i]
+                return False
+
+            metrics[0] += 1
+            metrics[1] += 4
+            if L[i] <= R[j]:
+                arr[k] = L[i]
+                update_visual(arr, [k, left + i], metrics)
                 i += 1
             else:
-                b[k] = a[j]
+                arr[k] = R[j]
+                update_visual(arr, [k, mid + 1 + j], metrics)
                 j += 1
+            k += 1
+
+        while i < n1:
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                return False
+            metrics[1] += 2
+            arr[k] = L[i]
+            update_visual(arr, [k, left + i], metrics)
+            i += 1
+            k += 1
+
+        while j < n2:
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                return False
+            metrics[1] += 2
+            arr[k] = R[j]
+            update_visual(arr, [k, mid + 1 + j], metrics)
+            j += 1
+            k += 1
         
-        return b
-
-    def top_down_split_merge(b, i_begin, i_end, a):
-        if (i_end - i_begin) <= 1:
-            return
-        
-        i_middle = (i_begin + i_end) // 2
-
-        if quit_call(): # Prevents crashing and allows user to stop processing early.
-            print("Stopping Algorithm")
-            raise exit_from_nested_function
-
-        update_visual_callback(arr,[i_begin,i_end], metrics)
-
-        top_down_split_merge(a,i_begin,i_middle,b)
-        top_down_split_merge(a,i_middle,i_end,b)
-
-        return top_down_merge(b,i_begin, i_middle, i_end, a)
-
-        
-
-    def top_down_merge_sort(a,b,n):
-        b = copy_array(a,0,n,b)
-        return top_down_split_merge(a,0,n,b)
-
-    try:
-        update_visual_callback(top_down_merge_sort(arr,[],n),[n-1],metrics)
         return True
-    except exit_from_nested_function:
+
+    def merge_sort_recursive(arr, left, right):
+        if left < right:
+            mid = (left + right) // 2
+
+            if not merge_sort_recursive(arr, left, mid):
+                return False
+            if not merge_sort_recursive(arr, mid + 1, right):
+                return False
+
+            update_visual(arr, list(range(left, right + 1)), metrics)
+            if not merge(arr, left, mid, right):
+                return False
+
+        return True
+
+    update_visual(array, list(range(len(array))), metrics)
+    if not merge_sort_recursive(array, 0, len(array) - 1):
         return False
+    return True
+
 
 # TODO
 def heapSort(arr, update_visual_callback, quit_call):
@@ -356,3 +371,7 @@ def bogoSort(arr, update_visual_callback, quit_call):
     
     # Array has been sorted.
     return True
+
+# TODO 
+def quickSort(arr, update_visual_callback, quit_call):
+    return False
