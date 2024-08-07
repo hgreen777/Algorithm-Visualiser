@@ -2,7 +2,6 @@ import random
 import math
 
 """TODO"""
-#TODO : Insertion Sort
 #TODO : Heap Sort
 #TODO : Counting Sort
 #TODO : Quick Sort 
@@ -254,9 +253,49 @@ def bubbleSort(arr, update_visual_callback, quit_call):
             print("Algorithm Completed")
             return True
 
-# TODO
 def insertionSort(arr, update_visual_callback, quit_call):
-    return False
+    # Initialising variables
+    metrics = [0,0]
+    n = len(arr)
+    i = 1
+
+    # Loop over all elements in the array
+    while i < n:
+        if quit_call(): # Prevents crashing and allows user to stop processing early.
+            print("Stopping Algorithm")
+            return False
+        
+        # Set a temp variable x to hold the current element (so it can be moved to the correct location)
+        x = arr[i]
+        # Set another pointer to the next element to be inserted into the sorted arr.
+        j = i
+
+        metrics[1] += 1
+
+        # Loop backwords through the sorted array to find where the element should be located.
+        while j > 0 and arr[j-1] > x:
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                return False
+
+            metrics[0] += 1 # Update comparisons metric
+            metrics[1] += 3 # Update array accesses metric
+            
+            # Shift all elements to the right one so that when the correct location for the focused element has been found, it can overwrite the current element in that location. 
+            arr[j] = arr[j-1]
+            j -= 1
+
+            update_visual_callback(arr,[i,j], metrics)  # Update the visual
+        
+        # Set the correct location to the currently focused element and move onto the next element in the array.
+        arr[j] = x
+        i += 1
+
+        metrics[1] += 1 # Update array accesses metric
+        update_visual_callback(arr, [i], metrics)   # Update the visual 
+
+    
+    return True
 
 def mergeSort(array, update_visual, quit_call):
     metrics = [0,0]
