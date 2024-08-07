@@ -3,8 +3,7 @@ import math
 
 """TODO"""
 #TODO : Heap Sort
-#TODO : Counting Sort
-#TODO : Quick Sort 
+#TODO : Counting Sort 
 
 """SEARCHING ALGORITHMS"""
 def linearSearch(arr, update_visual_callback, quit_call):
@@ -447,6 +446,66 @@ def bogoSort(arr, update_visual_callback, quit_call):
     # Array has been sorted.
     return True
 
-# TODO 
 def quickSort(arr, update_visual_callback, quit_call):
-    return False 
+    # Initialize variables
+    metrics = [0,0]
+
+    def sort(arr, low_index, high_index):
+        # Set the pointers to the start of subarray, end of syb array and pivot in the middle
+        left = low_index
+        right = high_index
+        pivot = arr[(low_index + high_index) // 2]
+
+        metrics[1] += 1
+
+        # While the left pointer is still small then right pointer 
+        while left <= right:
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                return False
+            
+            #  Ensure all the elements to the left of the pivot are smaller then the pivot element
+            while arr[left] < pivot and left < high_index:
+                if quit_call(): # Prevents crashing and allows user to stop processing early.
+                    print("Stopping Algorithm")
+                    return False
+            
+                left += 1
+                metrics[0] += 1
+                metrics[1] += 1
+            metrics[1] += 1
+
+            # Ensure all the elements to the right of the pivot are greater then the pivot.
+            while pivot < arr[right] and right > low_index:
+                if quit_call(): # Prevents crashing and allows user to stop processing early.
+                    print("Stopping Algorithm")
+                    return False
+
+                right -= 1
+
+                metrics[0] += 1
+                metrics[1] += 1
+            metrics[1] += 1
+            
+            if left <= right:
+                # Swap the elements which are not on the correct side of the pivot and move pointers onto next element.
+                x = arr[left]
+                arr[left] = arr[right]
+                arr[right] = x
+
+                left += 1
+                right -= 1
+
+                metrics[1] += 4
+
+            
+            update_visual_callback(arr, [left,pivot,right],metrics)
+
+        # Recurse with the left section of the pivot & right of pivot to sort the whole array. 
+        if low_index < right: sort(arr, low_index, right)
+        if right < high_index: sort(arr, left, high_index)
+
+
+
+    sort(arr,0, len(arr) - 1)
+    return True 
