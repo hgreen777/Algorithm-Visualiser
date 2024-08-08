@@ -466,6 +466,8 @@ def countingSort(arr, update_visual_callback, quit_call):
     # Iterate over all the numbers in the array and increment the count for that element in the count array.
     for num in arr:
         count_arr[num] += 1
+        metrics[1] += 1
+
 
     # Calculate the prefix sum, so the location for the element can be found.
     for i in range(1,k+1):
@@ -480,7 +482,8 @@ def countingSort(arr, update_visual_callback, quit_call):
         arr[count_arr[input_arr[i]] - 1] = input_arr[i]
         count_arr[input_arr[i]] -= 1
 
-        update_visual_callback(arr,[i],[0,0])       # Update visual
+        metrics[1] += 3
+        update_visual_callback(arr,[i],metrics)       # Update visual
 
     return True
 
