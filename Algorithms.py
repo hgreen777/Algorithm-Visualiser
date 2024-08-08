@@ -2,7 +2,6 @@ import random
 import math
 
 """TODO"""
-#TODO : Heap Sort
 #TODO : Counting Sort 
 
 """SEARCHING ALGORITHMS"""
@@ -393,9 +392,65 @@ def mergeSort(array, update_visual, quit_call):
         return False
     return True
 
-# TODO
 def heapSort(arr, update_visual_callback, quit_call):
-    return False
+    metrics = [0,0]
+    
+    def sort(arr):
+        n = len(arr)
+
+        # Build max heap 
+        for i in range((n // 2) - 1 ,-1,-1):
+            heapify(arr,n,i)
+
+        # Extract max elements from the heap and place in the "sorted" section of the array. 
+        for i in range(n - 1, 0, -1):
+            arr[i], arr[0] = arr[0], arr[i]  # swap placing biggest element in the heap in the arr at i
+            
+            metrics[1] += 4 # Update metrics.
+
+            heapify(arr, i, 0)  # Fix heap to find new biggest element
+
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                return False
+            
+            update_visual_callback(arr,[i],metrics) # Update visual with sorted subsection growth.
+        
+        return True
+
+    def heapify(arr,n, i):
+        max = i # The biggest element should be at i (on first run, the biggest is the first element )
+
+        # Pointers to the left and right child in the heap
+        left  = (2 * i) + 1        
+        right = (2 * i) + 2
+
+        # If the left child is greater then the root, max needs to be the left child.
+        if left < n and arr[max] < arr[left]:
+            max = left
+        
+        # If the right child is greater then the root max needs to be the right child. 
+        if right < n and arr[max] < arr[right]:
+            max = right
+
+        # Update metrics
+        metrics[0] += 2
+        metrics[1] += 4
+        
+        # Ensure the root is the biggest element (if the max pointer has changed to one of the child nodes)
+        if max != i:
+            metrics[1] += 4
+
+            arr[i], arr[max] = arr[max], arr[i]
+
+            update_visual_callback(arr,[i],metrics) # Update visual with heap creation 
+            # heapify the root
+            heapify(arr,n,max)
+
+    if not sort(arr):
+        return False
+    update_visual_callback(arr,[0],metrics)
+    return True
 
 # TODO
 def countingSort(arr, update_visual_callback, quit_call):
@@ -509,3 +564,20 @@ def quickSort(arr, update_visual_callback, quit_call):
 
     sort(arr,0, len(arr) - 1)
     return True 
+
+#def leave():
+#    n = len(arr) - 1
+#        for i in range(n,1,-1):
+#            x = arr[1]
+#            arr[1] = arr[i]
+#            arr[i] = x
+#
+#            update_visual_callback(arr,[i],metrics)
+#
+#            heapify(arr, 1)
+#
+#    # No visual call or stop, let it heap [efficiency - update visual after its done]
+#    def build_max_heap(arr):
+#        n = len(arr)
+#        for i in range((n // 2) - 1 ,-1,-1):
+#            heapify(arr,i)
