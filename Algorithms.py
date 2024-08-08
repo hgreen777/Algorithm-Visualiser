@@ -1,8 +1,6 @@
 import random
 import math
 
-# TODO : fix radix sort re-run
-
 """SEARCHING ALGORITHMS"""
 def linearSearch(arr, update_visual_callback, quit_call):
     comparisons = 0
@@ -136,8 +134,9 @@ def bogoSearch(arr, update_visual_callback, quit_call):
     found = False
 
     while not found:
-        if quit_call():
+        if quit_call(): # Prevents crashing and allows user to stop processing early.
             print("Stopping Algorithm")
+            return False
         
         x = random.randint(0,n - 1)
 
