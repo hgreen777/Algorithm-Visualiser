@@ -9,7 +9,7 @@ import numpy as np
 """User Defined Variables - Customise to personal liking"""
 framerate = 500                  # Advise < 1000 (unlikely pc will be quick enough). Try to match the framerate with the actual to make it more efficient like with games, capping the fps makes it smoother.
 array_size = 2500            # Cannot be bigger then the useable X (advised size depends on sorting/searching algorithm used).
-current_algorithm = heapSort      # Pick the current running algo.
+current_algorithm = countingSort      # Pick the current running algo.
 launch_with_sorted_array = False     # When the program launches if this is true the array will be shown in its final state, sorted. (If false, array is reshuffled anyway before starting algo (purely aesthetic)).
 sorted_array_for_algo = False      # Does the algorithm need a sorted array to run.
 disable_sound = True              # Enable/Disable Sound.

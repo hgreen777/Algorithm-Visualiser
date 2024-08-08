@@ -37,6 +37,8 @@ Algorithms that require a sorted array:
 - Counting Sort
 - Bogo Sort
 - Quick Sort
+- Selection Sort
+- Radix Sort
 
 # Future
 - Boost FPS

@@ -2,7 +2,8 @@ import random
 import math
 
 """TODO"""
-#TODO : Counting Sort 
+#TODO : Selection
+#TODO : Radix Sort
 
 """SEARCHING ALGORITHMS"""
 def linearSearch(arr, update_visual_callback, quit_call):
@@ -452,9 +453,36 @@ def heapSort(arr, update_visual_callback, quit_call):
     update_visual_callback(arr,[0],metrics)
     return True
 
-# TODO
 def countingSort(arr, update_visual_callback, quit_call):
-    return False
+    #Initialise variables
+    k = len(arr)
+    metrics = [0,0]
+
+    # Counting sort is very bad sort for when there are no repeats in the data. 
+
+    input_arr = arr.copy()      # Create a copy of the original arr so arr can be overwritten for the visual.
+    count_arr = [0] * (k+1)     # Create a count array to keep track of how many times a number appears (Due to algorithm_visualiser will be a full array with 1 as every element)
+
+    # Iterate over all the numbers in the array and increment the count for that element in the count array.
+    for num in arr:
+        count_arr[num] += 1
+
+    # Calculate the prefix sum, so the location for the element can be found.
+    for i in range(1,k+1):
+        count_arr[i] += count_arr[i - 1]
+
+    # Superimpose the input_arr onto the arr using the count_arr
+    for i in range(k-1,-1,-1):
+        if quit_call(): # Prevents crashing and allows user to stop processing early.
+            print("Stopping Algorithm")
+            return False
+
+        arr[count_arr[input_arr[i]] - 1] = input_arr[i]
+        count_arr[input_arr[i]] -= 1
+
+        update_visual_callback(arr,[i],[0,0])       # Update visual
+
+    return True
 
 def bogoSort(arr, update_visual_callback, quit_call):
     n = len(arr)
