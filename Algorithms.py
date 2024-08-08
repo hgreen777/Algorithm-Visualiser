@@ -1,7 +1,7 @@
 import random
 import math
 
-# TODO : Fix quick sort quitting 
+# TODO : Fix heap sort  quitting 
 # TODO : fix radix sort re-run
 
 """SEARCHING ALGORITHMS"""
@@ -587,13 +587,21 @@ def quickSort(arr, update_visual_callback, quit_call):
             update_visual_callback(arr, [left,pivot,right],metrics)
 
         # Recurse with the left section of the pivot & right of pivot to sort the whole array. 
-        if low_index < right: sort(arr, low_index, right)
-        if right < high_index: sort(arr, left, high_index)
+        if low_index < right: 
+            if not sort(arr, low_index, right):
+                return False
+        if right < high_index: 
+            if not sort(arr, left, high_index):
+                return False
+
+        return True
 
 
 
-    sort(arr,0, len(arr) - 1)
-    return True 
+    if not sort(arr,0, len(arr) - 1):
+        return False
+    else:
+        return True 
 
 def selectionSort(arr, update_visual_callback, quit_call):
     # Initialise variables
