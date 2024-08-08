@@ -564,20 +564,3 @@ def quickSort(arr, update_visual_callback, quit_call):
 
     sort(arr,0, len(arr) - 1)
     return True 
-
-#def leave():
-#    n = len(arr) - 1
-#        for i in range(n,1,-1):
-#            x = arr[1]
-#            arr[1] = arr[i]
-#            arr[i] = x
-#
-#            update_visual_callback(arr,[i],metrics)
-#
-#            heapify(arr, 1)
-#
-#    # No visual call or stop, let it heap [efficiency - update visual after its done]
-#    def build_max_heap(arr):
-#        n = len(arr)
-#        for i in range((n // 2) - 1 ,-1,-1):
-#            heapify(arr,i)
