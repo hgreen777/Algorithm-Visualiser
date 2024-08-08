@@ -408,7 +408,7 @@ def heapSort(arr, update_visual_callback, quit_call):
             metrics[1] += 4 # Update metrics.
 
             if not heapify(arr, i, 0):  # Fix heap to find new biggest element
-                return True
+                return False
 
             if quit_call(): # Prevents crashing and allows user to stop processing early.
                 print("Stopping Algorithm")
@@ -590,7 +590,7 @@ def quickSort(arr, update_visual_callback, quit_call):
                 metrics[1] += 4
 
             
-            update_visual_callback(arr, [left,pivot,right],metrics)
+            update_visual_callback(arr,[pivot,left,right],metrics)
 
         # Recurse with the left section of the pivot & right of pivot to sort the whole array. 
         if low_index < right: 
