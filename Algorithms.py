@@ -595,3 +595,22 @@ def quickSort(arr, update_visual_callback, quit_call):
 
     sort(arr,0, len(arr) - 1)
     return True 
+
+# TODO
+def selectionSort(arr, update_visual_callback, quit_call):
+    
+    if quit_call(): # Prevents crashing and allows user to stop processing early.
+        print("Stopping Algorithm")
+        return False
+
+    return False
+
+# TODO
+def radixSort(arr,update_visual_callback, quit_call):
+    
+    if quit_call(): # Prevents crashing and allows user to stop processing early.
+        print("Stopping Algorithm")
+        return False
+
+    
+    return False
