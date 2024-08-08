@@ -11,7 +11,7 @@ framerate = 500                # Advise < 1000 (unlikely pc will be quick enough
 array_size = 500            # Cannot be bigger then the useable X (advised size depends on sorting/searching algorithm used).
 current_algorithm = radixSort      # Pick the current running algo.
 launch_with_sorted_array = False     # When the program launches if this is true the array will be shown in its final state, sorted. (If false, array is reshuffled anyway before starting algo (purely aesthetic)).
-sorted_array_for_algo = False      # Does the algorithm need a sorted array to run.
+sorted_array_for_algo = True      # Does the algorithm need a sorted array to run.
 disable_sound = True              # Enable/Disable Sound.
 
 screenX,useableX = 2500, 2500       # May need to edit based on monitor, allows bigger array size.
