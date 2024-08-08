@@ -1,9 +1,8 @@
 import random
 import math
 
-"""TODO"""
-#TODO : Selection
-#TODO : Radix Sort
+# TODO : Fix quick sort quitting 
+# TODO : fix radix sort re-run
 
 """SEARCHING ALGORITHMS"""
 def linearSearch(arr, update_visual_callback, quit_call):
@@ -630,12 +629,63 @@ def selectionSort(arr, update_visual_callback, quit_call):
 
     return True
 
-# TODO
 def radixSort(arr,update_visual_callback, quit_call):
-    
-    if quit_call(): # Prevents crashing and allows user to stop processing early.
-        print("Stopping Algorithm")
-        return False
+    # Initialise metrics
+    metrics = [0,0]
 
+    # Driver counting sort
+    def counting_sort(arr, exp1):
+        n = len(arr)
+
+        # Copy the array so it can be overwritten (for the visual)
+        input_arr = arr.copy()
+        count = [0] * 10    # Declare a count array for all the digits 0-9.
+
+        for i in range(0, n):
+            index = input_arr[i] // exp1    # Get the current digit from the current element 
+            count[index % 10] += 1          # Increase the count for that digit.
+
+            metrics[1] += 1
+
+        # Prefix sum the counts so the location for elements can be determined. 
+        for i in range(1,10):
+            count[i] += count[i - 1]
+
+        # Build the output array based of the count 
+        i = n - 1
+        while i >= 0:
+            index = input_arr[i] // exp1                # Get the index of the current elements digit so it can be searched in count to determine location. 
+            arr[count[index % 10] - 1] = input_arr[i]   # Overwrite the element to the correct location in the array
+            count[index % 10] -= 1
+
+            # Handle UI
+            metrics[1] += 3
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                return False
+            update_visual_callback(arr,[i],metrics)
+            
+            i -= 1 
+
+        return True
+
+
+    # Radix Sort.
+    def sort(arr):
+        # Finds the biggest number in the array [to find number of digits in it]
+        max1 = max(arr)
+
+        exp = 1 # Initialise current exponent 10^i [where i = 1 atm]
+        
+        # Repeat counting sort for every digit in the biggest number in the array.
+        while max1 / exp >= 1:
+            if not counting_sort(arr, exp):     # Do counting sort on the current exponent [digit]
+                return False
+            exp *= 10                           # Increase exponent by factor of 10 to do counting sort on the next digit.
+        
+        return True
     
-    return False
+    if not sort(arr):
+        return False
+    else:
+        return True
