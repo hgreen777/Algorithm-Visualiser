@@ -596,14 +596,39 @@ def quickSort(arr, update_visual_callback, quit_call):
     sort(arr,0, len(arr) - 1)
     return True 
 
-# TODO
 def selectionSort(arr, update_visual_callback, quit_call):
-    
-    if quit_call(): # Prevents crashing and allows user to stop processing early.
-        print("Stopping Algorithm")
-        return False
+    # Initialise variables
+    n = len(arr)
+    metrics= [0,0]
 
-    return False
+    for i in range(n - 1):
+        j_min = i
+
+        # Search the rest of the array to find the next smallest element.
+        for j in range(i+1,n):
+            metrics[0] += 1
+            metrics[1] += 2
+
+            if arr[j] < arr[j_min]:
+                j_min = j
+
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                return False
+            update_visual_callback(arr, [j,i], metrics) # Update visual, make processing look quicker. 
+
+        if j_min != i:
+            # Swap the selected smallest element (j_min) to i [the current focused element to be found] & update metrics.
+            metrics[1] += 4  
+            arr[i], arr[j_min] = arr[j_min], arr[i]
+
+            # Updating Visual
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                return False
+            update_visual_callback(arr, [j,i], metrics)
+
+    return True
 
 # TODO
 def radixSort(arr,update_visual_callback, quit_call):
