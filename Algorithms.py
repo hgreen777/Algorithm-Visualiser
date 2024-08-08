@@ -1,7 +1,6 @@
 import random
 import math
 
-# TODO : Fix heap sort  quitting 
 # TODO : fix radix sort re-run
 
 """SEARCHING ALGORITHMS"""
@@ -400,7 +399,8 @@ def heapSort(arr, update_visual_callback, quit_call):
 
         # Build max heap 
         for i in range((n // 2) - 1 ,-1,-1):
-            heapify(arr,n,i)
+            if not heapify(arr,n,i):
+                return False
 
         # Extract max elements from the heap and place in the "sorted" section of the array. 
         for i in range(n - 1, 0, -1):
@@ -408,7 +408,8 @@ def heapSort(arr, update_visual_callback, quit_call):
             
             metrics[1] += 4 # Update metrics.
 
-            heapify(arr, i, 0)  # Fix heap to find new biggest element
+            if not heapify(arr, i, 0):  # Fix heap to find new biggest element
+                return True
 
             if quit_call(): # Prevents crashing and allows user to stop processing early.
                 print("Stopping Algorithm")
@@ -442,10 +443,16 @@ def heapSort(arr, update_visual_callback, quit_call):
             metrics[1] += 4
 
             arr[i], arr[max] = arr[max], arr[i]
-
+            
+            if quit_call(): # Prevents crashing and allows user to stop processing early.
+                print("Stopping Algorithm")
+                return False
             update_visual_callback(arr,[i],metrics) # Update visual with heap creation 
             # heapify the root
-            heapify(arr,n,max)
+            if not heapify(arr,n,max):
+                return False
+            
+        return True
 
     if not sort(arr):
         return False
